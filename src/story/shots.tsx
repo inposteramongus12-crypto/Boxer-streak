@@ -16,6 +16,7 @@ import {PART6} from './shots4';
 import {PART78A} from './shots5';
 import {PART78B} from './shots6';
 import {PART9} from './shots7';
+import {PART1011} from './shots8';
 import {FL, HS, HT, WRAP, Rope, bent, dirA, grow, guard, hands, hip, hit, tagY} from './common';
 
 /* «Что если бы один пропуск обнулял 30 дней бокса?» — хук (001–007) и часть 1 (008–025).
@@ -788,5 +789,5 @@ export const SHOTS: ShotDef[] = [
 	...PART78A,
 	...PART78B,
 	...PART9,
-	{at: '148', C: Pending, own: true, ownCuts: []},
+	...PART1011,
 ];

@@ -36,34 +36,35 @@ const roundNow = (m: number) => {
 const Hud: React.FC<{gf: number; bar?: boolean; big?: boolean}> = ({gf, bar = true, big}) => {
 	const m = mins(gf);
 	const swapNow = SWAPS.some((s) => Math.abs(m - (1424 + s)) < 0.12);
-	const X0 = 470;
-	const W = 1380;
+	const X0 = 700;
+	const W = 1180;
 	const px = (t: number) => X0 + (t / 11) * W;
 	const lbl = roundNow(m);
+	const short = (t: number) => (t % 1 ? hms(1424 + t).slice(3) + ':30' : hms(1424 + t));
 	return (
 		<>
-			<Led text={hms(m, swapNow)} size={big ? 110 : 80} />
+			<Led text={hms(m, swapNow)} size={104} />
 			{bar ? (
-				<svg width={1920} height={200} style={{position: 'absolute', left: 0, top: 0}}>
+				<svg width={1920} height={300} style={{position: 'absolute', left: 0, top: 0}}>
 					{SEGS.map(([a, b, c, t], i) => (
 						<g key={i}>
-							<rect x={px(a) + 2} y={44} width={px(b) - px(a) - 4} height={56} rx={12} fill={c} stroke="#10132a" strokeWidth={4} opacity={0.95} />
-							<text x={(px(a) + px(b)) / 2} y={84} textAnchor="middle" fontSize={b - a === 3 ? 36 : 26} fontFamily={FONT} fontWeight={900} fill="#fff">{t}</text>
+							<rect x={px(a) + 2} y={40} width={px(b) - px(a) - 4} height={104} rx={20} fill={c} stroke="#10132a" strokeWidth={6} opacity={0.95} />
+							<text x={(px(a) + px(b)) / 2} y={110} textAnchor="middle" fontSize={b - a === 3 ? 56 : 34} fontFamily={FONT} fontWeight={900} fill="#fff">{b - a === 3 ? t : t === 'ОТДЫХ' ? 'ОТД.' : t}</text>
 						</g>
 					))}
 					{SWAPS.map((s) => (
 						<g key={s}>
-							<rect x={px(s) - 7} y={104} width={14} height={22} rx={5} fill="#7fe0ff" stroke="#10132a" strokeWidth={3} />
-							<text x={px(s)} y={160} textAnchor="middle" fontSize={30} fontFamily={FONT} fontWeight={800} fill="#7fe0ff">{hms(1424 + s)}</text>
+							<rect x={px(s) - 9} y={150} width={18} height={30} rx={6} fill="#7fe0ff" stroke="#10132a" strokeWidth={4} />
+							<text x={px(s)} y={226} textAnchor="middle" fontSize={44} fontFamily={FONT} fontWeight={900} fill="#7fe0ff" stroke="#10132a" strokeWidth={5} paintOrder="stroke">{short(s)}</text>
 						</g>
 					))}
-					<text x={X0} y={34} fontSize={30} fontFamily={FONT} fontWeight={800} fill="#c8d0ea">23:44</text>
-					<text x={X0 + W} y={34} textAnchor="end" fontSize={30} fontFamily={FONT} fontWeight={800} fill="#c8d0ea">23:55</text>
-					{m >= 1424 && m <= 1435 ? <polygon points={`${px(m - 1424) - 14},${38} ${px(m - 1424) + 14},${38} ${px(m - 1424)},${68}`} fill="#fff" stroke="#10132a" strokeWidth={3} /> : null}
+					<text x={X0} y={32} fontSize={38} fontFamily={FONT} fontWeight={900} fill="#c8d0ea" stroke="#10132a" strokeWidth={5} paintOrder="stroke">23:44</text>
+					<text x={X0 + W} y={32} textAnchor="end" fontSize={38} fontFamily={FONT} fontWeight={900} fill="#c8d0ea" stroke="#10132a" strokeWidth={5} paintOrder="stroke">23:55</text>
+					{m >= 1424 && m <= 1435 ? <polygon points={`${px(m - 1424) - 20},${36} ${px(m - 1424) + 20},${36} ${px(m - 1424)},${78}`} fill="#fff" stroke="#10132a" strokeWidth={4} /> : null}
 				</svg>
 			) : null}
 			{lbl ? (
-				<div style={{position: 'absolute', left: 48, bottom: 44, background: '#11142c', border: '5px solid #7fe0ff', borderRadius: 40, padding: '8px 30px', color: '#7fe0ff', fontFamily: FONT, fontWeight: 900, fontSize: 52}}>{lbl}</div>
+				<div style={{position: 'absolute', left: 48, bottom: 44, background: '#11142c', border: '6px solid #7fe0ff', borderRadius: 44, padding: '10px 34px', color: '#7fe0ff', fontFamily: FONT, fontWeight: 900, fontSize: 68}}>{lbl}</div>
 			) : null}
 		</>
 	);
@@ -122,9 +123,9 @@ const S127: React.FC = () => {
 			<Layer depth={1}>
 				<Svg>
 					<Actor who="hero" x={700} floor={FL} s={HS} facing={1} faceTurn={0.4} look={[0.8, 0.2]} expr="worried" pose={pose} uid="h127" />
-					{heroTag(720, 1, 150, tagY(HS) + 56)}
+					{heroTag(720, 1, 130, tagY(HS) + 56)}
 					<Actor who="tema" x={1290} floor={FL} s={1} facing={-1} faceTurn={0.5} look={[-0.7, 0]} expr="wide" pose={idle(gf, 4)} uid="t127" />
-					{temaTag(f, 1290, 1, 130, tagY(1))}
+					{temaTag(f, 1290, 1, 90, tagY(1))}
 				</Svg>
 			</Layer>
 		</Stage>
@@ -159,13 +160,13 @@ const S128: React.FC = () => {
 						<rect x={8} y={-26} width={14} height={40} rx={6} fill="#e2483a" />
 						<rect x={26} y={-30} width={14} height={44} rx={6} fill="#e2483a" />
 					</g>
-					{heroTag(w.x + 20, 1.1, 150, tagY(HS) - w.bob)}
+					{heroTag(w.x + 20, 1.1, 130, tagY(HS) - w.bob)}
 					<g transform={`translate(${w.x + 90},${hip(HS) - 40})`} opacity={tap > 0.05 ? 1 : 0}>
 						<rect x={-20} y={-30} width={40} height={60} rx={8} fill="#10132a" stroke="#7fe0ff" strokeWidth={3} />
 						<text y={8} textAnchor="middle" fontSize={16} fontFamily={FONT} fontWeight={800} fill="#ff4a3a">23:42</text>
 					</g>
 					<Actor who="tema" x={1290} floor={FL} s={1} facing={-1} faceTurn={0.5} look={[-0.8, 0]} expr={sp === 'TEMA' ? 'worried' : 'wide'} pose={gesture('armsCrossed', idle(gf, 4), 0.9, f)} uid="t128" />
-					{temaTag(f, 1290, 1.1, 130, tagY(1) - 100)}
+					{temaTag(f, 1290, 1.1, 90, tagY(1) - 100)}
 				</Svg>
 			</Layer>
 			<Led text={hms(mins(gf))} />
@@ -177,7 +178,7 @@ const S128: React.FC = () => {
 const Prep: React.FC<{k: number}> = ({k}) => {
 	const rows = ['ЛАПЫ В ПОЛОТЕНЦЕ', 'ТАЗ С ВОДОЙ', 'СТОПКА ПОЛОТЕНЕЦ'];
 	return (
-		<div style={{position: 'absolute', left: 40, bottom: 130, display: 'flex', gap: 16, alignItems: 'center'}}>
+		<div style={{position: 'absolute', left: 40, bottom: 190, display: 'flex', gap: 16, alignItems: 'center'}}>
 			<div style={{fontFamily: FONT, fontWeight: 900, fontSize: 40, color: '#c8d0ea', background: '#11142c', borderRadius: 26, padding: '6px 22px'}}>ПОДГОТОВКА 23:41 → 23:44</div>
 			{rows.map((r, i) => (
 				<div key={r} style={{fontFamily: FONT, fontWeight: 900, fontSize: 40, color: '#fff', background: '#11142c', border: '5px solid #5fe08a', borderRadius: 26, padding: '4px 20px', opacity: k > i * 0.33 ? 1 : 0.15}}>
@@ -208,8 +209,8 @@ const mkPrep = (variant: 0 | 1 | 2): React.FC => () => {
 					<Actor who="hero" x={1000} floor={FL} s={HS} facing={-1} faceTurn={0.4} look={[-0.7, 0.4]} expr="normal" pose={hp} uid={'h131' + variant} />
 					{padsWrapped([[930, 650 + wrap], [930, 716 + wrap]])}
 					<Actor who="tema" x={1250} floor={FL} s={1} facing={-1} faceTurn={0.4} look={[-0.6, 0.6]} expr="normal" pose={reach(idle(gf, 4), 'F', [40, -60], 1)} uid={'t131' + variant} />
-					{heroTag(1010, 1.1, 120, tagY(HS) - 90, false, true)}
-					{temaTag(f, 1250, 1.1, 110, tagY(1))}
+					{heroTag(1010, 1.1, 128, tagY(HS) - 90, false, true)}
+					{temaTag(f, 1250, 1.1, 90, tagY(1))}
 				</Svg>
 			</Layer>
 			<Hud gf={gf} bar={variant === 2} />
@@ -277,8 +278,8 @@ const S133: React.FC = () => {
 					<Actor who="tema" x={840} floor={FL} s={1} facing={1} faceTurn={0.4} look={[0.8, 0]} expr="normal" pose={tp} uid="t133" />
 					<Actor who="hero" x={1060} floor={FL} s={HS} facing={-1} faceTurn={0.4} look={[-0.8, 0]} expr="normal" mouth={sp === 'HERO' ? undefined : 'flat'} pose={hp} uid="h133" />
 					{pads([[960, 640], [960, 700]])}
-					{heroTag(1070, 1.15, 120, tagY(HS) - 90)}
-					{temaTag(f, 840, 1.15, 120, tagY(1))}
+					{heroTag(1070, 1.15, 124, tagY(HS) - 90)}
+					{temaTag(f, 840, 1.15, 90, tagY(1))}
 					<Onoma x={960} y={560} text="тс" t={e - 30} c="#c8d0ea" rot={6} size={50} />
 				</Svg>
 			</Layer>
@@ -306,7 +307,7 @@ const S135: React.FC = () => {
 						<rect x={-34} y={-52} width={68} height={104} rx={12} fill="#10132a" stroke="#7fe0ff" strokeWidth={4} />
 						<text y={14} textAnchor="middle" fontSize={34} fontFamily={FONT} fontWeight={900} fill="#7fe0ff">{e > 30 ? '3:00' : '0:00'}</text>
 					</g>
-					{heroTag(1070, 1.3, 130, tagY(HS) - 20)}
+					{heroTag(1070, 1.3, 122, tagY(HS) - 20)}
 					<Actor who="tema" x={840} floor={FL} s={1} facing={1} faceTurn={0.4} look={[0.8, 0]} expr="angry" pose={guard(idle(gf, 4), 1)} uid="t135" />
 				</Svg>
 			</Layer>
@@ -373,7 +374,7 @@ const mkRound = (line: string, mode: Mode, win: [number, number], view: 'wide' |
 	if (atBedT) tp = reach(tp, 'F', toLocal(BEDX - 20, 770, temaX, hip(1), 1, 1), 1);
 	const eyes = line === '141' ? grow(e, 70, 14) : 0;
 	const hf = heroWorks ? (walkingT || atBedT ? 1 : 1) : 1;
-	const camT = view === 'wide' ? usePush(camOn(1080, 560, 1.05), camOn(1100, 560, 1.22)) : view === 'bed' ? usePush(camOn(1450, 640, 1.5), camOn(1500, 650, 1.8)) : usePush(camOn(1000, 540, 1.65), camOn(960, 540, 1.9));
+	const camT = view === 'wide' ? usePush(camOn(1080, 560, 1.05), camOn(1100, 560, 1.22)) : view === 'bed' ? usePush(camOn(1450, 640, 1.5), camOn(1500, 650, 1.8)) : usePush(camOn(1000, 470, 1.55), camOn(960, 470, 1.75));
 	const cam = camT;
 	const facingH: 1 | -1 = swapperIsHero && sw > 0.02 ? 1 : heroWorks ? 1 : -1;
 	const facingT: 1 | -1 = swapperIsTema && sw > 0.02 ? 1 : heroWorks ? -1 : 1;

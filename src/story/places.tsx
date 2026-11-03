@@ -204,7 +204,7 @@ export const Heart: React.FC<{x: number; y: number; f: number; bpm?: number; s?:
 	);
 };
 // цвет сердца по пульсу: серое (покой) → жёлтое (не засчитывается) → красное (считается)
-export const heartColor = (bpm: number) => interpolateColors(bpm, [85, 115, 145], ['#8c93a8', '#ffd34a', '#ff4a5e']);
+export const heartColor = (bpm: number) => interpolateColors(bpm, [85, 115, 142, 150], ['#8c93a8', '#ffd34a', '#ffd34a', '#ff4a5e']);
 export const Tag: React.FC<{x: number; y: number; value: number; f: number; s?: number; warn?: boolean; ok?: boolean; grey?: boolean; bpm?: number; label?: string; pop?: number; heart?: boolean; auto?: boolean; showBpm?: boolean; heartK?: number}> = ({x, y, value, f, s = 0.8, warn = false, ok = false, grey = false, bpm = 70, label = 'ДЕНЬ', pop = 1, heart = true, auto = false, showBpm = false, heartK = 1}) => {
 	const digits = String(Math.floor(value));
 	const dw = Math.max(2, digits.length) * 27;
