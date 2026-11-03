@@ -15,6 +15,7 @@ import {PART45} from './shots3';
 import {PART6} from './shots4';
 import {PART78A} from './shots5';
 import {PART78B} from './shots6';
+import {PART9} from './shots7';
 import {FL, HS, HT, WRAP, Rope, bent, dirA, grow, guard, hands, hip, hit, tagY} from './common';
 
 /* «Что если бы один пропуск обнулял 30 дней бокса?» — хук (001–007) и часть 1 (008–025).
@@ -749,11 +750,11 @@ const S19: React.FC = () => {
 	);
 };
 
-/* 127: заглушка до части 9 */
+/* 148: заглушка до части 10 */
 const Pending: React.FC = () => (
 	<Board tint="#101626">
 		<text x={960} y={560} textAnchor="middle" fontSize={80} fontFamily={FONT} fontWeight={900} fill="#c8d0ea">
-			ЧАСТЬ 9 — ПОЗЖЕ
+			ЧАСТЬ 10 — ПОЗЖЕ
 		</text>
 	</Board>
 );
@@ -786,5 +787,6 @@ export const SHOTS: ShotDef[] = [
 	...PART6,
 	...PART78A,
 	...PART78B,
-	{at: '127', C: Pending, own: true, ownCuts: []},
+	...PART9,
+	{at: '148', C: Pending, own: true, ownCuts: []},
 ];

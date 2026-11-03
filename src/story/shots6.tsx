@@ -147,12 +147,12 @@ const PX = 12;
 const Paths: React.FC<{zoom: number}> = ({zoom}) => {
 	const {f, at} = useShot();
 	const a0 = 150;
-	const b0 = 1060;
+	const b0 = 1080;
 	const mark = (x0: number, m: number) => x0 + m * PX;
 	const bar = (x0: number, m0: number, m1: number, y: number, c: string, k: number, label?: string) => (
 		<g opacity={Math.min(1, k * 3)}>
 			<rect x={mark(x0, m0)} y={y} width={Math.max(0, (m1 - m0) * PX * k)} height={100} rx={16} fill={c} stroke="#10132a" strokeWidth={5} />
-			{label && k > 0.7 ? <text x={mark(x0, m0) + 16} y={y + 66} fontSize={40} fontFamily={FONT} fontWeight={900} fill="#fff">{label}</text> : null}
+			{label && k > 0.7 ? <text x={mark(x0, m0) + 18} y={y + 68} fontSize={50} fontFamily={FONT} fontWeight={900} fill="#fff">{label}</text> : null}
 		</g>
 	);
 	const k0 = grow(f, at('115') + 6, 14);
@@ -162,38 +162,43 @@ const Paths: React.FC<{zoom: number}> = ({zoom}) => {
 	const kB = grow(f, at('119') + 8, 60);
 	const burn = grow(f, at('118') + 70, 10);
 	const done1 = kA1 > 0.98;
-	const lab = (x: number, y: number, t: string, c = '#c8d0ea', size = 42, anchor: 'start' | 'middle' = 'start') => <text x={x} y={y} textAnchor={anchor} fontSize={size} fontFamily={FONT} fontWeight={900} fill={c}>{t}</text>;
+	const lab = (x: number, y: number, t: string, c = '#c8d0ea', size = 42, anchor: 'start' | 'middle' | 'end' = 'start') => <text x={x} y={y} textAnchor={anchor} fontSize={size} fontFamily={FONT} fontWeight={900} fill={c}>{t}</text>;
 	return (
 		<g transform={`translate(960,540) scale(${zoom}) translate(-960,-540)`}>
 			<g opacity={k0}>
-				{lab(560, 250, 'ПУТЬ А', '#9fd3ff', 90, 'middle')}
-				{lab(1500, 250, 'ПУТЬ Б', '#ffd34a', 90, 'middle')}
+				{lab(560, 200, 'ПУТЬ А', '#9fd3ff', 84, 'middle')}
+				{lab(1500, 200, 'ПУТЬ Б', '#ffd34a', 84, 'middle')}
 			</g>
-			<line x1={960} y1={170} x2={960} y2={1040} stroke="#fff" strokeWidth={6} opacity={0.4} />
+			<line x1={960} y1={150} x2={960} y2={1050} stroke="#fff" strokeWidth={6} opacity={0.4} />
 			{[a0, b0].map((x0) => (
 				<g key={x0} opacity={k0}>
-					<line x1={x0} y1={560} x2={x0 + 780} y2={560} stroke="#5a6690" strokeWidth={4} opacity={0.5} />
-					{lab(x0, 530, '23:05')}
-					<line x1={mark(x0, 55)} y1={470} x2={mark(x0, 55)} y2={1000} stroke="#ff4a3a" strokeWidth={6} strokeDasharray="14 10" />
-					{lab(mark(x0, 55), 450, '00:00', '#ff4a3a', 46, 'middle')}
+					<line x1={mark(x0, 55)} y1={500} x2={mark(x0, 55)} y2={1040} stroke="#ff4a3a" strokeWidth={6} strokeDasharray="14 10" />
+					{lab(mark(x0, 55), 505, '00:00', '#ff4a3a', 56, 'middle')}
 				</g>
 			))}
 			{/* путь А: свои раунды → бег → раунды Тёмы после полуночи */}
-			{lab(mark(a0, 0), 690, '23:05 → 23:16', '#7be0a0', 40)}
-			{bar(a0, 0, 11, 580, '#3aa37a', kA1)}
-			{bar(a0, 11, 47, 580, '#2f6fd8', kA2, 'БЕГ 36 МИН')}
-			{kA2 > 0.98 ? lab(mark(a0, 47), 730, '23:52 У ДВЕРИ', '#9fd3ff', 42, 'middle') : null}
-			{lab(mark(a0, 50), 880, '23:55 → 00:06', '#ff8a7a', 40)}
-			{bar(a0, 50, 61, 800, '#e2483a', kA3)}
-			{kA3 > 0.98 ? lab(mark(a0, 61) + 20, 880, '✗', '#ff4a3a', 110) : null}
-			<Tag x={mark(a0, 5.5) + 160} y={400} value={29} f={f} s={1.6} ok={done1} warn={!done1} heart={false} />
-			<Tag x={mark(a0, 56)} y={400} value={burn > 0.5 ? 0 : 29} f={f} s={1.6} warn={burn < 0.5} heart={false} />
+			{lab(a0, 560, '23:05 – 23:16', '#7be0a0', 76)}
+			{bar(a0, 0, 11, 590, '#3aa37a', kA1)}
+			{bar(a0, 11, 47, 590, '#2f6fd8', kA2, 'БЕГ 36 МИН')}
+			{kA2 > 0.98 ? (
+				<g>
+					<polygon points={`${mark(a0, 47) - 16},700 ${mark(a0, 47) + 16},700 ${mark(a0, 47)},672`} fill="#9fd3ff" />
+					{lab(mark(a0, 47) + 40, 790, '23:52', '#9fd3ff', 92, 'end')}
+					{lab(mark(a0, 47) + 40, 850, 'У ДВЕРИ', '#9fd3ff', 52, 'end')}
+				</g>
+			) : null}
+			{lab(mark(a0, 50) - 30, 985, '23:55 – 00:06', '#ff8a7a', 80, 'end')}
+			{bar(a0, 50, 61, 920, '#e2483a', kA3)}
+			{kA3 > 0.98 ? lab(mark(a0, 61) + 22, 1000, '✗', '#ff4a3a', 100) : null}
+			<Tag x={a0 + 230} y={370} value={29} f={f} s={1.4} ok={done1} warn={!done1} heart={false} />
+			<Tag x={a0 + 520} y={370} value={burn > 0.5 ? 0 : 29} f={f} s={1.4} warn={burn < 0.5} heart={false} />
 			{/* путь Б: бежать сейчас */}
-			{bar(b0, 0, 36, 580, '#2f6fd8', kB, 'БЕЖАТЬ 23:05 → 23:41')}
+			{lab(b0, 560, '23:05 – 23:41', '#ffd34a', 76)}
+			{bar(b0, 0, 36, 590, '#2f6fd8', kB, 'БЕЖАТЬ')}
 			{kB > 0.98 ? (
 				<g>
-					<rect x={b0} y={760} width={780} height={150} rx={30} fill="#11142c" stroke="#ff6a5a" strokeWidth={8} />
-					{lab(b0 + 390, 855, 'ТВОИ РАУНДЫ: 0 ИЗ 3', '#ff6a5a', 62, 'middle')}
+					<rect x={b0} y={760} width={760} height={150} rx={30} fill="#11142c" stroke="#ff6a5a" strokeWidth={8} />
+					{lab(b0 + 380, 855, 'ТВОИ РАУНДЫ: 0 ИЗ 3', '#ff6a5a', 60, 'middle')}
 				</g>
 			) : null}
 		</g>

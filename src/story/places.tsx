@@ -566,3 +566,42 @@ export const NightRoad: React.FC<{scroll: number}> = ({scroll}) => {
 		</Svg>
 	);
 };
+
+/* ---------- Квартира Тёмы: коридор, справа открытая дверь в комнату брата (кровать, ночник), слева входная дверь, полка с полотенцами ---------- */
+export const Flat: React.FC<{f: number; towels?: number}> = ({f, towels = 1}) => (
+	<Svg>
+		<defs>
+			<linearGradient id="fl-w" x1="0" y1="0" x2="0" y2="1">
+				<stop offset="0" stopColor="#cdbfa0" />
+				<stop offset="1" stopColor="#b3a283" />
+			</linearGradient>
+			<radialGradient id="fl-l" cx="0.5" cy="0.2" r="0.9">
+				<stop offset="0" stopColor="#ffe3a0" stopOpacity={0.6} />
+				<stop offset="1" stopColor="#ffe3a0" stopOpacity={0} />
+			</radialGradient>
+		</defs>
+		<rect x={-400} y={-200} width={2800} height={1100} fill="url(#fl-w)" />
+		{Array.from({length: 28}).map((_, i) => <rect key={i} x={-300 + i * 110} y={-200} width={52} height={1100} fill="#00000010" />)}
+		<rect x={-400} y={850} width={2800} height={50} fill="#8a7a5c" />
+		<rect x={-400} y={900} width={2800} height={400} fill="#7e5a3a" />
+		{Array.from({length: 22}).map((_, i) => <line key={i} x1={-300 + i * 140} y1={900} x2={-420 + i * 175} y2={1300} stroke="#00000030" strokeWidth={3} />)}
+		<rect x={-400} y={896} width={2800} height={8} fill="#2a1a10" opacity={0.5} />
+		{/* входная дверь */}
+		<rect x={120} y={360} width={220} height={540} fill="#4a3426" stroke="#2a1a10" strokeWidth={6} />
+		<circle cx={310} cy={640} r={10} fill="#d9c27a" />
+		<circle cx={230} cy={470} r={8} fill="#10132a" />
+		{/* бра */}
+		<ellipse cx={720} cy={320} rx={40} ry={14} fill="#fff3b0" />
+		<polygon points="660,330 780,330 900,880 540,880" fill="url(#fl-l)" opacity={0.5 + Math.sin(f / 30) * 0.03} />
+		{/* полка с полотенцами */}
+		<rect x={440} y={600} width={330} height={16} fill="#6e4a2e" />
+		{towels > 0 ? [['#7fe0ff', 560], ['#ffffff', 540], ['#ffd34a', 520], ['#e86aa0', 500]].map(([c, y], i) => <rect key={i} x={470 + (i % 2) * 14} y={Number(y) - 20 + 40} width={150} height={28} rx={8} fill={c as string} stroke="#10132a" strokeWidth={3} />) : null}
+		{/* комната брата: открытая дверь */}
+		<rect x={1470} y={330} width={330} height={570} fill="#1a1d3a" stroke="#2a1a10" strokeWidth={8} />
+		<rect x={1486} y={346} width={298} height={554} fill="#2a2f63" />
+		<circle cx={1730} cy={420} r={26} fill="#ffe3a0" opacity={0.85} />
+		<rect x={1520} y={760} width={250} height={110} rx={14} fill="#3a5fb0" stroke="#10132a" strokeWidth={4} />
+		<rect x={1520} y={740} width={90} height={40} rx={14} fill="#f4f1e6" />
+		<rect x={1800} y={330} width={30} height={570} fill="#6e4a2e" />
+	</Svg>
+);
