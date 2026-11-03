@@ -50,9 +50,9 @@ export const Rope: React.FC<{p: Pose; x: number; s: number; facing: 1 | -1; a: n
 	);
 };
 // табличка героя: число берётся из счётчика ролика
-export const HT: React.FC<{x: number; s?: number; warn?: boolean; ok?: boolean; bpm?: number; yy?: number; pop?: number; heart?: boolean; auto?: boolean; showBpm?: boolean; heartK?: number}> = ({x, s = 0.8, warn, ok, bpm = 70, yy, pop = 1, heart = true, auto, showBpm, heartK}) => {
+export const HT: React.FC<{x: number; s?: number; warn?: boolean; ok?: boolean; grey?: boolean; bpm?: number; yy?: number; pop?: number; heart?: boolean; auto?: boolean; showBpm?: boolean; heartK?: number}> = ({x, s = 0.8, warn, ok, grey, bpm = 70, yy, pop = 1, heart = true, auto, showBpm, heartK}) => {
 	const {gf} = useShot();
-	return <Tag x={x} y={yy ?? tagY(HS)} value={counterAt(gf)} f={gf} s={s} warn={warn} ok={ok} bpm={bpm} pop={pop} heart={heart} auto={auto} showBpm={showBpm} heartK={heartK} />;
+	return <Tag x={x} y={yy ?? tagY(HS)} value={counterAt(gf)} f={gf} s={s} warn={warn} ok={ok} grey={grey} bpm={bpm} pop={pop} heart={heart} auto={auto} showBpm={showBpm} heartK={heartK} />;
 };
 export const grow = (f: number, t: number, len = 10) => interpolate(f, [t, t + len], [0, 1], {...clamp, easing: ease});
 export const WRAP = '#f2efe6';

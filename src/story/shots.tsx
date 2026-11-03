@@ -11,6 +11,8 @@ import {Corridor} from '../kit/sets';
 import {Onoma} from '../reference/PauseTime';
 import {Bag, BoxStreet, Clock, Gym, Heart, Stairwell, Tag} from './places';
 import {PART23} from './shots2';
+import {PART45} from './shots3';
+import {PART6} from './shots4';
 import {FL, HS, HT, WRAP, Rope, bent, dirA, grow, guard, hands, hip, hit, tagY} from './common';
 
 /* «Что если бы один пропуск обнулял 30 дней бокса?» — хук (001–007) и часть 1 (008–025).
@@ -745,11 +747,11 @@ const S19: React.FC = () => {
 	);
 };
 
-/* 060: заглушка до части 4 */
+/* 094: заглушка до части 7 */
 const Pending: React.FC = () => (
 	<Board tint="#101626">
 		<text x={960} y={560} textAnchor="middle" fontSize={80} fontFamily={FONT} fontWeight={900} fill="#c8d0ea">
-			ЧАСТЬ 4 — ПОЗЖЕ
+			ЧАСТЬ 7 — ПОЗЖЕ
 		</text>
 	</Board>
 );
@@ -778,5 +780,7 @@ export const SHOTS: ShotDef[] = [
 	{at: '024', C: S18},
 	{at: '025', C: S19},
 	...PART23,
-	{at: '060', C: Pending, own: true, ownCuts: []},
+	...PART45,
+	...PART6,
+	{at: '094', C: Pending, own: true, ownCuts: []},
 ];

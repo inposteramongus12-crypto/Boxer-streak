@@ -205,11 +205,11 @@ export const Heart: React.FC<{x: number; y: number; f: number; bpm?: number; s?:
 };
 // цвет сердца по пульсу: серое (покой) → жёлтое (не засчитывается) → красное (считается)
 export const heartColor = (bpm: number) => interpolateColors(bpm, [85, 115, 145], ['#8c93a8', '#ffd34a', '#ff4a5e']);
-export const Tag: React.FC<{x: number; y: number; value: number; f: number; s?: number; warn?: boolean; ok?: boolean; bpm?: number; label?: string; pop?: number; heart?: boolean; auto?: boolean; showBpm?: boolean; heartK?: number}> = ({x, y, value, f, s = 0.8, warn = false, ok = false, bpm = 70, label = 'ДЕНЬ', pop = 1, heart = true, auto = false, showBpm = false, heartK = 1}) => {
+export const Tag: React.FC<{x: number; y: number; value: number; f: number; s?: number; warn?: boolean; ok?: boolean; grey?: boolean; bpm?: number; label?: string; pop?: number; heart?: boolean; auto?: boolean; showBpm?: boolean; heartK?: number}> = ({x, y, value, f, s = 0.8, warn = false, ok = false, grey = false, bpm = 70, label = 'ДЕНЬ', pop = 1, heart = true, auto = false, showBpm = false, heartK = 1}) => {
 	const digits = String(Math.floor(value));
 	const dw = Math.max(2, digits.length) * 27;
 	const w = 26 + (label.length * 16 + 10) + 18 + dw + 22;
-	const c = ok ? '#5fe08a' : warn && Math.floor(f / 7) % 2 === 0 ? '#ff4a3a' : '#ffc94a';
+	const c = grey ? '#aab1c4' : ok ? '#5fe08a' : warn && Math.floor(f / 7) % 2 === 0 ? '#ff4a3a' : '#ffc94a';
 	const hc = auto ? heartColor(bpm) : bpm > 0 ? '#ff4a5e' : '#7a8296';
 	const hx = x + (w / 2 + 42) * s;
 	return (
@@ -217,7 +217,7 @@ export const Tag: React.FC<{x: number; y: number; value: number; f: number; s?: 
 			<AgeBadge x={x} y={y} value={value} s={s} pop={pop} label={label} c={c} />
 			{heart && heartK > 0.02 ? <Heart x={hx} y={y - 4 * s} f={f} bpm={bpm} s={s * 0.9 * heartK} c={hc} /> : null}
 			{heart && showBpm && heartK > 0.5 ? (
-				<text x={hx + 34 * s} y={y + 12 * s} fontSize={34 * s} fontFamily={FONT} fontWeight={800} fill={hc} stroke="#10132a" strokeWidth={5 * s} paintOrder="stroke">
+				<text x={hx + 40 * s} y={y + 15 * s} fontSize={44 * s} fontFamily={FONT} fontWeight={800} fill={hc} stroke="#10132a" strokeWidth={6 * s} paintOrder="stroke">
 					{Math.round(bpm)}
 				</text>
 			) : null}
@@ -412,5 +412,74 @@ export const Stadium: React.FC<{f: number}> = () => (
 		<rect x={-400} y={686} width={2800} height={10} fill="#f2f2f2" opacity={0.7} />
 		{/* забор вокруг */}
 		<rect x={-400} y={660} width={2800} height={10} fill="#2a2a32" />
+	</Svg>
+);
+
+/* ---------- Фасад дома Тёмы: подъезд с козырьком, окно брата на втором этаже, скамейка, куст, фонарь ---------- */
+export const Facade: React.FC<{f: number}> = ({f}) => (
+	<Svg>
+		<defs>
+			<linearGradient id="fc-s" x1="0" y1="0" x2="0" y2="1">
+				<stop offset="0" stopColor="#2f3a6a" />
+				<stop offset="1" stopColor="#e39a6a" />
+			</linearGradient>
+			<radialGradient id="fc-w" cx="0.5" cy="0.5" r="0.7">
+				<stop offset="0" stopColor="#ffe3a0" stopOpacity={0.55} />
+				<stop offset="1" stopColor="#ffe3a0" stopOpacity={0} />
+			</radialGradient>
+		</defs>
+		<rect x={-400} y={-300} width={2800} height={1300} fill="url(#fc-s)" />
+		<rect x={-200} y={60} width={2600} height={840} fill="#8c5a48" />
+		{Array.from({length: 11}).map((_, r) =>
+			Array.from({length: 26}).map((__, c) => <rect key={`${r}-${c}`} x={-190 + c * 104 + (r % 2) * 52} y={70 + r * 76} width={98} height={70} rx={3} fill="#9a6652" opacity={0.7} />),
+		)}
+		{/* подъезд */}
+		<rect x={380} y={520} width={300} height={380} fill="#2a2018" />
+		<rect x={400} y={540} width={260} height={360} fill="#ffd9a0" opacity={0.28} />
+		<rect x={340} y={500} width={380} height={34} rx={6} fill="#3a4256" />
+		<rect x={700} y={640} width={50} height={90} rx={6} fill="#cfd6e6" />
+		<circle cx={725} cy={670} r={7} fill="#ffd34a" />
+		<rect x={340} y={900} width={380} height={14} fill="#6a6a72" />
+		{/* окно брата */}
+		<rect x={1480} y={230} width={270} height={260} rx={6} fill="#2a2018" />
+		<rect x={1496} y={246} width={238} height={228} fill="#ffd9a0" />
+		<ellipse cx={1615} cy={360} rx={260} ry={220} fill="url(#fc-w)" />
+		{/* окна соседей */}
+		{[[900, 230], [1180, 230], [900, 540], [1180, 540], [1860, 230], [1860, 540]].map(([x, y], i) => (
+			<rect key={i} x={x} y={y} width={190} height={210} rx={6} fill={i % 2 ? '#ffd98a' : '#2d3350'} opacity={0.85} />
+		))}
+		{/* скамейка и куст */}
+		<rect x={1000} y={820} width={260} height={16} fill="#6e4a2e" />
+		<rect x={1010} y={836} width={14} height={64} fill="#2a1a10" />
+		<rect x={1236} y={836} width={14} height={64} fill="#2a1a10" />
+		<ellipse cx={1850} cy={850} rx={150} ry={86} fill="#2f6f46" />
+		<ellipse cx={1780} cy={820} rx={90} ry={64} fill="#3a8656" />
+		<rect x={-400} y={900} width={2800} height={400} fill="#4a4a56" />
+		<rect x={-400} y={896} width={2800} height={12} fill="#7a7a86" />
+		<rect x={-400} y={-300} width={2800} height={1300} fill="#10132a" opacity={0.1} />
+	</Svg>
+);
+
+/* ---------- Кинозал: тёмный зал, экран светится и мерцает, ряды кресел ---------- */
+export const Cinema: React.FC<{f: number}> = ({f}) => (
+	<Svg>
+		<defs>
+			<radialGradient id="cn-g" cx="0.5" cy="0" r="1">
+				<stop offset="0" stopColor="#bfe0ff" stopOpacity={0.55} />
+				<stop offset="1" stopColor="#bfe0ff" stopOpacity={0} />
+			</radialGradient>
+		</defs>
+		<rect x={-400} y={-300} width={2800} height={1400} fill="#12102a" />
+		<rect x={560} y={80} width={800} height={380} rx={8} fill="#e8f4ff" opacity={0.85 + Math.sin(f / 3) * 0.05} />
+		<rect x={600} y={120} width={720} height={300} fill="#5aa0e8" opacity={0.7} />
+		<circle cx={960 + Math.sin(f / 20) * 90} cy={270} r={60} fill="#ffd34a" opacity={0.85} />
+		<polygon points="560,460 1360,460 1700,900 220,900" fill="url(#cn-g)" opacity={0.55} />
+		<rect x={-400} y={900} width={2800} height={400} fill="#2a1530" />
+		{[0, 1, 2, 3, 4].map((i) => (
+			<g key={i}>
+				<rect x={90 + i * 380} y={760} width={200} height={150} rx={40} fill="#6b1f3a" />
+				<rect x={110 + i * 380} y={740} width={160} height={40} rx={20} fill="#8a2a4a" />
+			</g>
+		))}
 	</Svg>
 );

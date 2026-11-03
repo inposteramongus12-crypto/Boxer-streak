@@ -15,9 +15,9 @@ import {toLocal} from '../engine/Stickman';
 
 /* Части 2 и 3 (реплики 026–059). Герой Саня — жёлтый, Тёма — красный.
    Пульс по сценарию: покой 80 (серое сердце), считается ≥150 (красное), ровный бег 125 (жёлтое). */
-const FS: Pose = {lean: -2, head: 0, armB: [20, 40], armF: [30, 40], legB: [90, 0], legF: [92, 0]}; // сидит на полу, ноги прямо вперёд
-const SEAT = FL - 34;
-const shadow = (x: number, k = 1) => <ellipse cx={x} cy={FL + 4} rx={70 * k} ry={11} fill="#000" opacity={0.22} style={{filter: 'blur(5px)'}} />;
+export const FS: Pose = {lean: -2, head: 0, armB: [20, 40], armF: [30, 40], legB: [90, 0], legF: [92, 0]}; // сидит на полу, ноги прямо вперёд
+export const SEAT = FL - 34;
+export const shadow = (x: number, k = 1) => <ellipse cx={x} cy={FL + 4} rx={70 * k} ry={11} fill="#000" opacity={0.22} style={{filter: 'blur(5px)'}} />;
 const Mat: React.FC<{x0: number; x1: number; roll?: number}> = ({x0, x1, roll = 0}) => {
 	const cx = x0 + roll * (x1 - x0);
 	const r = 6 + roll * 34;
@@ -38,13 +38,13 @@ const Mat: React.FC<{x0: number; x1: number; roll?: number}> = ({x0, x1, roll = 
 		</g>
 	);
 };
-const Chalk: React.FC<{x: number; y: number; text: string; k: number; size?: number; c?: string; anchor?: 'start' | 'middle'}> = ({x, y, text, k, size = 80, c = '#f4f1e6', anchor = 'start'}) => (
+export const Chalk: React.FC<{x: number; y: number; text: string; k: number; size?: number; c?: string; anchor?: 'start' | 'middle'}> = ({x, y, text, k, size = 80, c = '#f4f1e6', anchor = 'start'}) => (
 	<text x={x} y={y} fontSize={size} fontFamily={FONT} fontWeight={800} fill={c} opacity={0.95} textAnchor={anchor}>
 		{text.slice(0, Math.ceil(text.length * k))}
 	</text>
 );
-const heartPath = 'M0,60 C-120,-20 -80,-110 -32,-96 C-14,-92 0,-72 0,-60 C0,-72 14,-92 32,-96 C80,-110 120,-20 0,60 Z';
-const pill = (x: number, y: number, text: string, c: string, k: number, size = 44) => {
+export const heartPath = 'M0,60 C-120,-20 -80,-110 -32,-96 C-14,-92 0,-72 0,-60 C0,-72 14,-92 32,-96 C80,-110 120,-20 0,60 Z';
+export const pill = (x: number, y: number, text: string, c: string, k: number, size = 44) => {
 	const w = text.length * size * 0.62 + 50;
 	return (
 		<g transform={`translate(${x},${y}) scale(${k})`} opacity={Math.min(1, k * 1.4)}>
@@ -55,7 +55,7 @@ const pill = (x: number, y: number, text: string, c: string, k: number, size = 4
 		</g>
 	);
 };
-const hand = (p: Pose, x: number, s: number, facing: 1 | -1, side: 'F' | 'B', t: [number, number], k: number) => reach(p, side, toLocal(t[0], t[1], x, hip(s), s, facing), k);
+export const hand = (p: Pose, x: number, s: number, facing: 1 | -1, side: 'F' | 'B', t: [number, number], k: number) => reach(p, side, toLocal(t[0], t[1], x, hip(s), s, facing), k);
 
 /* ================= ЧАСТЬ 2 ================= */
 
@@ -198,11 +198,11 @@ const S29: React.FC = () => {
 				<text x={560} y={510} textAnchor="middle" fontSize={22} fontFamily={FONT} fontWeight={700} fill="#8f98bd">
 					ШАГОВ
 				</text>
-				<text x={650} y={450} fontSize={42} fontFamily={FONT} fontWeight={900} fill="#10132a">
+				<text x={616} y={448} fontSize={32} fontFamily={FONT} fontWeight={900} fill="#10132a">
 					ШАГОМЕР
 				</text>
-				<rect x={650} y={480} width={150} height={70} rx={14} fill="#e2483a" />
-				<text x={725} y={528} textAnchor="middle" fontSize={44} fontFamily={FONT} fontWeight={900} fill="#fff">
+				<rect x={616} y={480} width={170} height={70} rx={14} fill="#e2483a" />
+				<text x={701} y={529} textAnchor="middle" fontSize={44} fontFamily={FONT} fontWeight={900} fill="#fff">
 					−50%
 				</text>
 			</g>
@@ -338,7 +338,7 @@ const mkKitchen = (variant: 'a' | 'b', first: string): React.FC => () => {
 			<Layer depth={1}>
 				<Svg>
 					<Chandelier x={1100} a={ang} />
-					{variant === 'a' ? pill(430, 360, `РАУНД 1  ${Math.floor(secs / 60)}:${String(secs % 60).padStart(2, '0')}`, '#7fe0ff', grow(e, 6, 10), 40) : null}
+					{variant === 'a' ? pill(430, 360, `РАУНД 1 · ${Math.floor(secs / 60)}:${String(secs % 60).padStart(2, '0')}`, '#7fe0ff', grow(e, 6, 10), 40) : null}
 					<rect x={380} y={598} width={50} height={42} rx={8} fill="#10132a" stroke="#7fe0ff" strokeWidth={3} />
 					{shadow(760)}
 					<Actor who="hero" x={760} floor={FL} s={HS} facing={1} faceTurn={0.4} look={[0.4, 0.3]} expr="normal" mouth="open" pose={p} bob={jmp * 14} uid={'h34' + variant} />
@@ -777,7 +777,7 @@ const S50: React.FC = () => {
 					<HT x={760} s={0.95} auto bpm={96} />
 					<Actor who="tema" x={TX0} floor={FL} s={1} facing={-1} faceTurn={0.4} look={[-0.4, 0.2]} expr="worried" mouth="flat" pose={tp} uid="t50" />
 					<HT x={TX0} s={1} auto showBpm bpm={bpm} yy={tagY(1) - 6} />
-					{pill(TX0, FL - 520 - 80, `РАУНД 2  0:${String(secs).padStart(2, '0')}`, out > 0.5 ? '#ff6a5a' : '#7fe0ff', grow(e, 6, 10), 42)}
+					{pill(TX0, FL - 520 - 80, `РАУНД 2 · 0:${String(secs).padStart(2, '0')}`, out > 0.5 ? '#ff6a5a' : '#7fe0ff', grow(e, 6, 10), 42)}
 					{out > 0.02 ? <text x={TX0 + 250} y={FL - 520 - 60} fontSize={110 * out} fontFamily={FONT} fontWeight={900} fill="#ff4a3a" opacity={out}>✗</text> : null}
 				</Svg>
 			</Layer>
@@ -811,7 +811,7 @@ const S51: React.FC = () => {
 					<HT x={760} s={0.95} auto bpm={96} />
 					<Actor who="tema" x={TX0} floor={FL} s={1} facing={-1} faceTurn={0.4} look={[-0.7, 0]} expr={sigh > 0.4 ? 'sad' : 'angry'} mouth={sigh > 0.4 ? 'frown' : undefined} pose={tp} uid="t51" />
 					<HT x={TX0} s={0.95} auto showBpm bpm={bpm} yy={tagY(1)} />
-					{pill(TX0, FL - 600, `РАУНД 2  0:${String(Math.max(0, Math.min(59, secs))).padStart(2, '0')}`, '#7fe0ff', grow(e, 40, 10), 42)}
+					{pill(TX0, FL - 600, `РАУНД 2 · 0:${String(Math.max(0, Math.min(59, secs))).padStart(2, '0')}`, '#7fe0ff', grow(e, 40, 10), 42)}
 				</Svg>
 			</Layer>
 		</Stage>
@@ -944,7 +944,7 @@ const S57: React.FC = () => {
 const S58: React.FC = () => {
 	const {f, gf, at} = useShot();
 	const e = f - at('058');
-	const run = walkTo(e, 40, 96, 960, 1900, 5, 0.9);
+	const run = walkTo(e, 40, 96, 1200, 1900, 5, 0.9);
 	const jt = grow(e, 96, 22);
 	const over = e >= 96;
 	const jx = over ? 1900 + 170 * jt : run.x;
@@ -961,13 +961,13 @@ const S58: React.FC = () => {
 			</Layer>
 			<Layer depth={1.3}>
 				<Svg>
-					<Clock x={500} y={330} text="19:30" s={1.4} f={f} />
+					<Clock x={400} y={210} text="19:30" s={1.15} f={f} />
 				</Svg>
 			</Layer>
 			<Layer depth={1}>
 				<Svg>
-					<Actor who="hero" x={780} floor={FL} s={HS} facing={1} faceTurn={0.5} look={[0.9, 0]} expr="wide" pose={hp} uid="h58" />
-					<HT x={780} s={0.95} auto bpm={78} />
+					<Actor who="hero" x={700} floor={FL} s={HS} facing={1} faceTurn={0.5} look={[0.9, 0]} expr="wide" pose={hp} uid="h58" />
+					<HT x={700} s={0.95} auto bpm={78} />
 					<Actor who="tema" x={tx} floor={fl} s={1} facing={1} faceTurn={0.5} look={[0.9, 0]} expr="worried" pose={tp} vx={run.vx} bob={over ? jy : run.bob} uid="t58" shadow={!over} />
 					<g transform={`translate(${tx - 52},${hip(1) - 130 - (over ? jy : run.bob) - Math.sin(e / 2.6) * 4})`}>
 						<rect width={44} height={82} rx={12} fill="#3a4256" stroke="#10132a" strokeWidth={3} />
