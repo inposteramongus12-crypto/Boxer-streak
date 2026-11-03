@@ -1,0 +1,13 @@
+{
+ "long": {
+  "name": "Long",
+  "bed": "sfx/bed.wav",
+  "concurrency": 3
+ },
+ "short": {
+  "name": "Short",
+  "bed": "sfx/bed.wav",
+  "timeline": "src/story/timeline.json",
+  "concurrency": 3
+ }
+}
