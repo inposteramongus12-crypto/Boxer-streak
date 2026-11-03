@@ -1,4 +1,5 @@
 import React from 'react';
+import {interpolateColors} from 'remotion';
 import {Svg} from '../engine/camera';
 import {AgeBadge, FONT} from '../kit/ui';
 
@@ -202,15 +203,214 @@ export const Heart: React.FC<{x: number; y: number; f: number; bpm?: number; s?:
 		</g>
 	);
 };
-export const Tag: React.FC<{x: number; y: number; value: number; f: number; s?: number; warn?: boolean; bpm?: number; label?: string; pop?: number; heart?: boolean}> = ({x, y, value, f, s = 0.8, warn = false, bpm = 70, label = 'ДЕНЬ', pop = 1, heart = true}) => {
+// цвет сердца по пульсу: серое (покой) → жёлтое (не засчитывается) → красное (считается)
+export const heartColor = (bpm: number) => interpolateColors(bpm, [85, 115, 145], ['#8c93a8', '#ffd34a', '#ff4a5e']);
+export const Tag: React.FC<{x: number; y: number; value: number; f: number; s?: number; warn?: boolean; ok?: boolean; bpm?: number; label?: string; pop?: number; heart?: boolean; auto?: boolean; showBpm?: boolean; heartK?: number}> = ({x, y, value, f, s = 0.8, warn = false, ok = false, bpm = 70, label = 'ДЕНЬ', pop = 1, heart = true, auto = false, showBpm = false, heartK = 1}) => {
 	const digits = String(Math.floor(value));
 	const dw = Math.max(2, digits.length) * 27;
 	const w = 26 + (label.length * 16 + 10) + 18 + dw + 22;
-	const c = warn && Math.floor(f / 7) % 2 === 0 ? '#ff4a3a' : '#ffc94a';
+	const c = ok ? '#5fe08a' : warn && Math.floor(f / 7) % 2 === 0 ? '#ff4a3a' : '#ffc94a';
+	const hc = auto ? heartColor(bpm) : bpm > 0 ? '#ff4a5e' : '#7a8296';
+	const hx = x + (w / 2 + 42) * s;
 	return (
 		<g>
 			<AgeBadge x={x} y={y} value={value} s={s} pop={pop} label={label} c={c} />
-			{heart ? <Heart x={x + (w / 2 + 42) * s} y={y - 4 * s} f={f} bpm={bpm} s={s * 0.9} c={bpm > 0 ? '#ff4a5e' : '#7a8296'} /> : null}
+			{heart && heartK > 0.02 ? <Heart x={hx} y={y - 4 * s} f={f} bpm={bpm} s={s * 0.9 * heartK} c={hc} /> : null}
+			{heart && showBpm && heartK > 0.5 ? (
+				<text x={hx + 34 * s} y={y + 12 * s} fontSize={34 * s} fontFamily={FONT} fontWeight={800} fill={hc} stroke="#10132a" strokeWidth={5 * s} paintOrder="stroke">
+					{Math.round(bpm)}
+				</text>
+			) : null}
 		</g>
 	);
 };
+
+/* ---------- Лестница вниз с перилами: 5 ступеней 170×72 слева сверху направо вниз, площадка на y=900 ---------- */
+export const STEP = {x0: 380, w: 170, h: 72, n: 5};
+export const stepY = (i: number) => 900 - (STEP.n - Math.min(STEP.n, Math.max(0, i))) * STEP.h; // поверхность ступени i (i=5 — площадка)
+export const StairDown: React.FC = () => (
+	<Svg>
+		<defs>
+			<linearGradient id="sd-w" x1="0" y1="0" x2="0" y2="1">
+				<stop offset="0" stopColor="#c9c3a8" />
+				<stop offset="1" stopColor="#a39d82" />
+			</linearGradient>
+		</defs>
+		<rect x={-400} y={-200} width={2800} height={1100} fill="url(#sd-w)" />
+		<rect x={-400} y={470} width={2800} height={430} fill="#58806a" opacity={0.9} />
+		<rect x={-400} y={462} width={2800} height={10} fill="#2b4a3a" />
+		<rect x={1500} y={300} width={260} height={400} rx={6} fill="#cfe6f5" stroke="#6b6a60" strokeWidth={10} />
+		<line x1={1630} y1={300} x2={1630} y2={700} stroke="#6b6a60" strokeWidth={8} />
+		{Array.from({length: STEP.n + 1}).map((_, i) => (
+			<g key={i}>
+				<rect x={STEP.x0 + i * STEP.w - (i === STEP.n ? 0 : 0)} y={stepY(i)} width={i === STEP.n ? 1400 : STEP.w + 2} height={1100} fill={i % 2 ? '#8a867a' : '#939083'} />
+				<rect x={STEP.x0 + i * STEP.w} y={stepY(i)} width={i === STEP.n ? 1400 : STEP.w + 2} height={10} fill="#bdb9a8" />
+			</g>
+		))}
+		<rect x={-400} y={stepY(0) + 200} width={STEP.x0 + 400} height={1100} fill="#939083" />
+		<rect x={-400} y={stepY(0)} width={STEP.x0 + 400} height={10} fill="#bdb9a8" />
+	</Svg>
+);
+// перила: линия на 170 px выше ступеней
+export const railY = (x: number) => {
+	const t = Math.min(1, Math.max(0, (x - STEP.x0) / (STEP.n * STEP.w)));
+	return stepY(0) + t * (900 - stepY(0)) - 170;
+};
+export const Rail: React.FC = () => {
+	const x1 = STEP.x0 - 60;
+	const x2 = STEP.x0 + STEP.n * STEP.w + 60;
+	return (
+		<g>
+			{[0, 1, 2, 3, 4, 5].map((i) => {
+				const x = STEP.x0 + i * STEP.w + 40;
+				return <line key={i} x1={x} y1={railY(x)} x2={x} y2={stepY(i)} stroke="#2a2a30" strokeWidth={7} />;
+			})}
+			<line x1={x1} y1={railY(x1)} x2={x2} y2={railY(x2)} stroke="#2a2a30" strokeWidth={14} strokeLinecap="round" />
+			<line x1={x1} y1={railY(x1) - 4} x2={x2} y2={railY(x2) - 4} stroke="#d9a15a" strokeWidth={6} strokeLinecap="round" />
+		</g>
+	);
+};
+
+/* ---------- Комната героя: вечер/ночь, окно, полка, торшер, деревянный пол ---------- */
+export const Room: React.FC<{f: number; night?: boolean}> = ({night = false}) => (
+	<Svg>
+		<defs>
+			<linearGradient id={night ? 'rm-wn' : 'rm-wd'} x1="0" y1="0" x2="0" y2="1">
+				<stop offset="0" stopColor={night ? '#262b48' : '#e9d8bd'} />
+				<stop offset="1" stopColor={night ? '#343a5c' : '#d9c3a0'} />
+			</linearGradient>
+			<linearGradient id="rm-f" x1="0" y1="0" x2="0" y2="1">
+				<stop offset="0" stopColor={night ? '#5a4636' : '#b98a5c'} />
+				<stop offset="1" stopColor={night ? '#3a2c22' : '#7e5a3a'} />
+			</linearGradient>
+			<radialGradient id="rm-l" cx="0.5" cy="0.1" r="0.9">
+				<stop offset="0" stopColor="#ffe3a0" stopOpacity={night ? 0.65 : 0.45} />
+				<stop offset="1" stopColor="#ffe3a0" stopOpacity={0} />
+			</radialGradient>
+		</defs>
+		<rect x={-400} y={-200} width={2800} height={1100} fill={`url(#${night ? 'rm-wn' : 'rm-wd'})`} />
+		{/* окно */}
+		<rect x={210} y={140} width={380} height={330} rx={8} fill="#1d2338" />
+		<rect x={226} y={156} width={348} height={298} fill={night ? '#0b1030' : '#f0a86a'} />
+		<rect x={226} y={156} width={348} height={150} fill={night ? '#1a2050' : '#e8805a'} opacity={0.8} />
+		{night ? [[290, 220], [380, 190], [500, 250], [450, 330]].map(([x, y], i) => <circle key={i} cx={x} cy={y} r={3} fill="#fff" opacity={0.8} />) : null}
+		<line x1={400} y1={156} x2={400} y2={454} stroke="#1d2338" strokeWidth={10} />
+		<line x1={226} y1={305} x2={574} y2={305} stroke="#1d2338" strokeWidth={10} />
+		{/* полка с книгами */}
+		<rect x={1200} y={300} width={420} height={16} fill="#6e4a2e" />
+		{[0, 1, 2, 3, 4, 5, 6].map((i) => (
+			<rect key={i} x={1214 + i * 52} y={300 - 90 + (i % 3) * 12} width={42} height={90 - (i % 3) * 12} fill={['#c9342a', '#2f6fd8', '#f2b21c', '#3aa37a', '#8b5cf6', '#e86aa0', '#3fc1c9'][i]} />
+		))}
+		{/* торшер */}
+		<line x1={1750} y1={460} x2={1750} y2={900} stroke="#2a2a32" strokeWidth={8} />
+		<path d="M1690,470 Q1750,380 1810,470 Z" fill="#ffd9a0" />
+		<polygon points="1690,470 1810,470 2050,900 1450,900" fill="url(#rm-l)" opacity={0.55} />
+		<rect x={-400} y={900} width={2800} height={400} fill="url(#rm-f)" />
+		{Array.from({length: 22}).map((_, i) => (
+			<line key={i} x1={-300 + i * 140} y1={900} x2={-420 + i * 175} y2={1300} stroke="#00000030" strokeWidth={3} />
+		))}
+		<rect x={-400} y={896} width={2800} height={8} fill="#2a1a10" opacity={0.5} />
+		{night ? <rect x={-400} y={-200} width={2800} height={1100} fill="#0a1020" opacity={0.18} /> : null}
+	</Svg>
+);
+
+/* ---------- Люстра на кухне: качается на угол `a` градусов ---------- */
+export const Chandelier: React.FC<{x: number; a: number}> = ({x, a}) => (
+	<g transform={`rotate(${a} ${x} -40)`}>
+		<line x1={x} y1={-40} x2={x} y2={240} stroke="#2a2a32" strokeWidth={6} />
+		<path d={`M${x - 110},300 Q${x},170 ${x + 110},300 Z`} fill="#f2b21c" stroke="#10132a" strokeWidth={4} />
+		<ellipse cx={x} cy={302} rx={110} ry={14} fill="#ffe3a0" />
+		<ellipse cx={x} cy={318} rx={46} ry={9} fill="#fff6c0" opacity={0.9} />
+	</g>
+);
+
+/* ---------- Двор за гаражами: ряд гаражей, забор из плит, турник, фонарь. night — ночь с конусом света ---------- */
+export const Yard: React.FC<{f: number; night?: boolean}> = ({f, night = false}) => (
+	<Svg>
+		<defs>
+			<linearGradient id={night ? 'yd-sn' : 'yd-sd'} x1="0" y1="0" x2="0" y2="1">
+				<stop offset="0" stopColor={night ? '#0b1030' : '#4a5a8a'} />
+				<stop offset="1" stopColor={night ? '#2a2f63' : '#f0a56a'} />
+			</linearGradient>
+			<radialGradient id="yd-l" cx="0.5" cy="0" r="1">
+				<stop offset="0" stopColor="#ffe9a8" stopOpacity={0.8} />
+				<stop offset="1" stopColor="#ffe9a8" stopOpacity={0} />
+			</radialGradient>
+		</defs>
+		<rect x={-400} y={-300} width={2800} height={1300} fill={`url(#${night ? 'yd-sn' : 'yd-sd'})`} />
+		{/* дальние многоэтажки */}
+		{[[-150, 220, 300], [200, 320, 240], [1300, 180, 280], [1650, 300, 260], [1950, 240, 300]].map(([x, y, w], i) => (
+			<g key={i}>
+				<rect x={x} y={y} width={w} height={900 - y} fill={night ? '#1b2142' : '#35406a'} />
+				{Array.from({length: 6}).map((_, r) => Array.from({length: 3}).map((__, c) => <rect key={`${r}${c}`} x={x + 30 + c * (w / 3.4)} y={y + 40 + r * 70} width={36} height={40} fill={night && (r + c + i) % 3 === 0 ? '#ffd98a' : '#00000040'} opacity={0.8} />))}
+			</g>
+		))}
+		{/* гаражи */}
+		{[-120, 280, 680, 1080].map((x, i) => (
+			<g key={x}>
+				<rect x={x} y={500} width={390} height={400} fill={['#8a6a58', '#6f7f8f', '#8f5a4a', '#6a7f6a'][i]} />
+				<rect x={x - 10} y={486} width={410} height={26} fill="#2a2a32" />
+				<rect x={x + 30} y={540} width={330} height={360} fill={['#b9503c', '#4b6a8a', '#c9a23c', '#4a7a5a'][i]} />
+				{Array.from({length: 8}).map((_, k) => (
+					<line key={k} x1={x + 30} y1={580 + k * 44} x2={x + 360} y2={580 + k * 44} stroke="#00000040" strokeWidth={4} />
+				))}
+				<rect x={x + 150} y={640} width={90} height={14} fill="#2a2a32" />
+			</g>
+		))}
+		{/* турник */}
+		<line x1={1560} y1={560} x2={1560} y2={900} stroke="#2a2a32" strokeWidth={14} />
+		<line x1={1860} y1={560} x2={1860} y2={900} stroke="#2a2a32" strokeWidth={14} />
+		<line x1={1550} y1={560} x2={1870} y2={560} stroke="#cfd6e6" strokeWidth={12} strokeLinecap="round" />
+		{/* забор из плит */}
+		<rect x={1940} y={690} width={600} height={210} fill="#9a9a9a" />
+		{[0, 1, 2].map((i) => (
+			<rect key={i} x={1950 + i * 200} y={700} width={190} height={190} fill="#b3b3b3" stroke="#6a6a6a" strokeWidth={4} />
+		))}
+		{/* фонарь */}
+		<line x1={1480} y1={120} x2={1480} y2={900} stroke="#1a1a22" strokeWidth={12} />
+		<rect x={1420} y={100} width={120} height={24} rx={8} fill="#1a1a22" />
+		<ellipse cx={1480} cy={130} rx={46} ry={10} fill={night ? '#fff3b0' : '#c9c6b0'} opacity={night ? 1 : 0.7} />
+		{night ? <polygon points="1440,130 1520,130 1920,900 1040,900" fill="url(#yd-l)" opacity={0.7 + Math.sin(f / 5) * 0.03} /> : null}
+		<rect x={-400} y={900} width={2800} height={400} fill={night ? '#2d3040' : '#6b6a72'} />
+		{Array.from({length: 14}).map((_, i) => (
+			<ellipse key={i} cx={-200 + i * 210} cy={980 + (i % 3) * 30} rx={40} ry={8} fill="#00000025" />
+		))}
+		<rect x={-400} y={896} width={2800} height={10} fill="#1a1a22" opacity={0.45} />
+		{night ? <rect x={-400} y={-300} width={2800} height={1300} fill="#050818" opacity={0.28} /> : null}
+	</Svg>
+);
+
+/* ---------- Школьный стадион: небо, трибуны, поле с воротами, беговая дорожка ---------- */
+export const Stadium: React.FC<{f: number}> = () => (
+	<Svg>
+		<defs>
+			<linearGradient id="st-s" x1="0" y1="0" x2="0" y2="1">
+				<stop offset="0" stopColor="#6aa0d8" />
+				<stop offset="1" stopColor="#f6d3a0" />
+			</linearGradient>
+		</defs>
+		<rect x={-400} y={-300} width={2800} height={1100} fill="url(#st-s)" />
+		{/* трибуны */}
+		{[0, 1, 2].map((i) => (
+			<rect key={i} x={-100} y={330 + i * 50} width={1500} height={52} fill={['#c9342a', '#e2483a', '#b3281f'][i]} opacity={0.9} />
+		))}
+		<rect x={-100} y={330} width={1500} height={10} fill="#10132a" opacity={0.3} />
+		{/* поле и ворота */}
+		<rect x={-400} y={480} width={2800} height={210} fill="#4a9a58" />
+		{Array.from({length: 10}).map((_, i) => (
+			<rect key={i} x={-400 + i * 300} y={480} width={150} height={210} fill="#3f8a4e" opacity={0.7} />
+		))}
+		<g stroke="#f2f2f2" strokeWidth={10} fill="none">
+			<path d="M1500,560 L1500,470 L1740,470 L1740,560" />
+		</g>
+		<path d="M1500,470 L1740,470 L1740,560 L1500,560 Z" fill="#ffffff" opacity={0.18} />
+		{/* дорожка */}
+		<rect x={-400} y={690} width={2800} height={520} fill="#c4573c" />
+		{[0, 1, 2, 3].map((i) => (
+			<rect key={i} x={-400} y={740 + i * 82} width={2800} height={6} fill="#f2f2f2" opacity={0.85} />
+		))}
+		<rect x={-400} y={686} width={2800} height={10} fill="#f2f2f2" opacity={0.7} />
+		{/* забор вокруг */}
+		<rect x={-400} y={660} width={2800} height={10} fill="#2a2a32" />
+	</Svg>
+);

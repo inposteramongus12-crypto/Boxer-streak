@@ -10,58 +10,12 @@ import {Board, FONT} from '../kit/ui';
 import {Corridor} from '../kit/sets';
 import {Onoma} from '../reference/PauseTime';
 import {Bag, BoxStreet, Clock, Gym, Heart, Stairwell, Tag} from './places';
+import {PART23} from './shots2';
+import {FL, HS, HT, WRAP, Rope, bent, dirA, grow, guard, hands, hip, hit, tagY} from './common';
 
 /* «Что если бы один пропуск обнулял 30 дней бокса?» — хук (001–007) и часть 1 (008–025).
    Остальные части — позже. Герой Саня — жёлтый, Тёма — красный. */
-const FL = 900;
-const HS = 1.05;
-const hip = (s: number) => FL - 157 * s;
-const tagY = (s: number) => FL - 157 * s - 164 * s - 115;
-const dirA = (a: number): [number, number] => [Math.sin((a * Math.PI) / 180), Math.cos((a * Math.PI) / 180)];
 
-const guard = (p: Pose, k: number) => reach(reach(p, 'F', [44, -128], k), 'B', [30, -106], k);
-const hit = (p: Pose, side: 'F' | 'B', x: number, s: number, facing: 1 | -1, t: [number, number], k: number) => reach(p, side, toLocal(t[0], t[1], x, hip(s), s, facing), k);
-// согнулся, руки на коленях
-const bent = (base: Pose, k: number): Pose => {
-	const p: Pose = {...base, lean: base.lean + 40 * k, head: base.head + 22 * k};
-	return reach(reach(p, 'F', [16, 74], k), 'B', [4, 78], k);
-};
-// кончик верёвки/скакалки между двумя кистями
-const hands = (p: Pose, x: number, s: number, facing: 1 | -1): {f: [number, number]; b: [number, number]} => {
-	const pts = rigPoints(p);
-	const end = (sh: [number, number], arm: [number, number]): [number, number] => {
-		const e: [number, number] = [sh[0] + dirA(arm[0])[0] * RIG.UA, sh[1] + dirA(arm[0])[1] * RIG.UA];
-		const a = arm[0] + arm[1];
-		return [e[0] + dirA(a)[0] * RIG.FA, e[1] + dirA(a)[1] * RIG.FA];
-	};
-	const hf = end(pts.shF, p.armF);
-	const hb = end(pts.shB, p.armB);
-	return {f: [x + hf[0] * s * facing, hip(s) + hf[1] * s], b: [x + hb[0] * s * facing, hip(s) + hb[1] * s]};
-};
-// скакалка: сверху/снизу крутится по фазе a (рад.)
-const Rope: React.FC<{p: Pose; x: number; s: number; facing: 1 | -1; a: number; c?: string; k?: number}> = ({p, x, s, facing, a, c = '#ffd34a', k = 1}) => {
-	const h = hands(p, x, s, facing);
-	const cx = (h.f[0] + h.b[0]) / 2 - 6 * facing;
-	const dy = Math.cos(a) * 360 * s;
-	const top = Math.max(120, Math.min(FL + 6, h.f[1] - dy));
-	const d = `M${h.f[0]},${h.f[1]} C${cx - 130 * s},${top} ${cx + 130 * s},${top} ${h.b[0]},${h.b[1]}`;
-	return (
-		<g opacity={k}>
-			<path d={d} stroke="#1a1208" strokeWidth={12} fill="none" strokeLinecap="round" />
-			<path d={d} stroke={c} strokeWidth={7} fill="none" strokeLinecap="round" />
-			{[h.f, h.b].map((q, i) => (
-				<rect key={i} x={q[0] - 8} y={q[1] - 20} width={16} height={40} rx={7} fill="#e2483a" stroke="#10132a" strokeWidth={3} />
-			))}
-		</g>
-	);
-};
-// табличка героя: число берётся из счётчика ролика
-const HT: React.FC<{x: number; s?: number; warn?: boolean; bpm?: number; yy?: number; pop?: number}> = ({x, s = 0.8, warn, bpm = 70, yy, pop = 1}) => {
-	const {gf} = useShot();
-	return <Tag x={x} y={yy ?? tagY(HS)} value={counterAt(gf)} f={gf} s={s} warn={warn} bpm={bpm} pop={pop} />;
-};
-const grow = (f: number, t: number, len = 10) => interpolate(f, [t, t + len], [0, 1], {...clamp, easing: ease});
-const WRAP = '#f2efe6';
 
 /* ================= ХУК ================= */
 
@@ -791,11 +745,11 @@ const S19: React.FC = () => {
 	);
 };
 
-/* 026: заглушка до части 2 */
+/* 060: заглушка до части 4 */
 const Pending: React.FC = () => (
 	<Board tint="#101626">
 		<text x={960} y={560} textAnchor="middle" fontSize={80} fontFamily={FONT} fontWeight={900} fill="#c8d0ea">
-			ЧАСТЬ 2 — ПОЗЖЕ
+			ЧАСТЬ 4 — ПОЗЖЕ
 		</text>
 	</Board>
 );
@@ -823,5 +777,6 @@ export const SHOTS: ShotDef[] = [
 	{at: '021', C: S17, whip: true},
 	{at: '024', C: S18},
 	{at: '025', C: S19},
-	{at: '026', C: Pending, own: true, ownCuts: []},
+	...PART23,
+	{at: '060', C: Pending, own: true, ownCuts: []},
 ];
