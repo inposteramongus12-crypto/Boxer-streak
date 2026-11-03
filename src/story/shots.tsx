@@ -136,16 +136,37 @@ const S2: React.FC = () => {
 	);
 };
 
-/* 004 N: «Через девятнадцать минут…» — таймер и «нужно одиннадцать» */
-const S3: React.FC = () => {
+/* 004 N: «оба счётчика» — крупный план: два лица и две мигающие «29» (≈1,8 с) */
+const S3c: React.FC = () => {
+	const {f, gf} = useShot();
+	const hp = bent({...idle(gf, 2), lean: 2 + Math.sin(f / 3.2) * 1.5}, 0.22);
+	const cam = usePush(camOn(1010, 548, 1.95), camOn(1010, 542, 2.2));
+	return (
+		<Stage cam={cam} bg="#2a3550" light={{x: 20, y: 5, o: 0.35}}>
+			<Layer depth={1.6}>
+				<Stairwell f={f} open={1} />
+			</Layer>
+			<Layer depth={1}>
+				<Svg>
+					<Actor who="hero" x={700} floor={FL} s={HS} facing={1} faceTurn={0.5} look={[0.9, 0.1]} expr="worried" mouth="open" pose={hp} uid="h3c" />
+					<HT x={730} s={1.25} warn bpm={150} yy={tagY(HS) + 22} />
+					<Actor who="tema" x={1290} floor={FL} s={1} facing={-1} faceTurn={0.5} look={[-0.9, 0.1]} expr="wide" mouth="flat" pose={idle(gf, 4)} uid="t3c" />
+					<Tag x={1290} y={tagY(1)} value={29} f={f} s={1.25} warn bpm={130} />
+				</Svg>
+			</Layer>
+		</Stage>
+	);
+};
+
+/* 004 N: «Через девятнадцать минут… вам нужно одиннадцать» — таймеры (два плана) */
+const mkTimers = (variant: 'a' | 'b'): React.FC => () => {
 	const {f, gf, at} = useShot();
-	const t0 = at('004') + 8;
-	const left = Math.max(0, 19 * 60 - Math.floor((f - t0) / 30) * 1);
+	const e = f - at('004'); // кадров от начала реплики
+	const left = Math.max(0, 19 * 60 - Math.floor(Math.max(0, e - 55) / 30));
 	const mm = String(Math.floor(left / 60)).padStart(2, '0');
 	const ss = String(left % 60).padStart(2, '0');
-	const need = grow(f, at('004') + 78, 10);
-	let hp = bent(idle(gf, 2), 0.3);
-	const cam = usePush(camOn(930, 540, 1.1), camOn(930, 520, 1.25));
+	const hp = bent(idle(gf, 2), 0.3);
+	const cam = variant === 'a' ? usePush(camOn(740, 540, 1.35), camOn(800, 530, 1.65)) : usePush(camOn(1000, 520, 1.1), camOn(1020, 515, 1.28));
 	const plate = (x: number, y: number, title: string, val: string, c: string, k: number) => (
 		<g transform={`translate(${x},${y}) scale(${k})`} opacity={k}>
 			<rect x={-250} y={-90} width={500} height={180} rx={20} fill="#10141f" stroke={c} strokeWidth={6} />
@@ -164,24 +185,29 @@ const S3: React.FC = () => {
 			</Layer>
 			<Layer depth={1}>
 				<Svg>
-					<Actor who="hero" x={700} floor={FL} s={HS} facing={1} faceTurn={0.4} look={[0.8, 0.2]} expr="worried" pose={hp} uid="h3" />
+					<Actor who="hero" x={700} floor={FL} s={HS} facing={1} faceTurn={0.4} look={[0.8, 0.2]} expr="worried" pose={hp} uid={'h3' + variant} />
 					<HT x={720} s={1} warn bpm={150} yy={tagY(HS) + 56} />
-					<Actor who="tema" x={1290} floor={FL} s={1} facing={-1} faceTurn={0.5} look={[-0.7, 0]} expr="wide" pose={idle(gf, 4)} uid="t3" />
+					<Actor who="tema" x={1290} floor={FL} s={1} facing={-1} faceTurn={0.5} look={[-0.7, 0]} expr="wide" pose={idle(gf, 4)} uid={'t3' + variant} />
 					<Tag x={1290} y={tagY(1)} value={29} f={f} s={1} warn bpm={130} />
-					{plate(560, 250, 'ДО ПОЛУНОЧИ', `${mm}:${ss}`, '#ff6a5a', grow(f, at('004') + 6, 10))}
-					{plate(1300, 250, 'НУЖНО', '11:00', '#7fe0ff', need)}
+					{plate(700, 310, 'ДО ПОЛУНОЧИ', `${mm}:${ss}`, '#ff6a5a', grow(e, 57, 10))}
+					{plate(1300, 310, 'НУЖНО', '11:00', '#7fe0ff', grow(e, 132, 10))}
 				</Svg>
 			</Layer>
 		</Stage>
 	);
 };
+const S3a = mkTimers('a');
+const S3b = mkTimers('b');
 
-/* 005 HERO: «Пусти. У нас одиннадцать минут на двоих.» — протискивается в квартиру */
-const S4: React.FC = () => {
-	const {f, gf, at} = useShot();
-	const w = walkTo(f, at('005') + 6, at('005') + 52, 700, 1330, 1, 0.34);
-	const tw = walkTo(f, at('005') + 18, at('005') + 50, 1290, 1480, 2, 0.22);
-	const cam = usePush(camOn(960, 560, 1.4), camOn(1180, 560, 1.5));
+/* 005 HERO: «Пусти. У нас одиннадцать минут на двоих.» — a: идёт за героем, b: крупно в проёме */
+const mkPush = (variant: 'a' | 'b'): React.FC => () => {
+	const {f, at} = useShot();
+	const t = f - at('005');
+	const w = walkTo(t, 6, 52, 700, 1300, 1, 0.34);
+	const tw = walkTo(t, 18, 50, 1290, 1540, 2, 0.22);
+	const camA = camOn(Math.min(1180, w.x + 150), 560, 1.45 + 0.1 * (t / 40));
+	const camB = usePush(camOn(1330, 560, 2.0), camOn(1350, 555, 2.35));
+	const cam = variant === 'a' ? camA : camB;
 	return (
 		<Stage cam={cam} bg="#2a3550" light={{x: 20, y: 5, o: 0.35}}>
 			<Layer depth={1.6}>
@@ -189,9 +215,9 @@ const S4: React.FC = () => {
 			</Layer>
 			<Layer depth={1}>
 				<Svg>
-					<Actor who="tema" x={tw.x} floor={FL} s={1} facing={-1} faceTurn={0.5} look={[0.6, 0]} expr="wide" pose={tw.pose} vx={tw.vx} bob={tw.bob} uid="t4" />
-					<Tag x={tw.x} y={tagY(1)} value={29} f={f} s={1} warn bpm={130} />
-					<Actor who="hero" x={w.x} floor={FL} s={HS} facing={1} faceTurn={0.4} look={[0.9, 0]} expr="angry" mouth="open" pose={w.pose} vx={w.vx} bob={w.bob} uid="h4" />
+					<Actor who="tema" x={tw.x} floor={FL} s={1} facing={-1} faceTurn={0.5} look={[0.6, 0]} expr="wide" pose={tw.pose} vx={tw.vx} bob={tw.bob} uid={'t4' + variant} />
+					<Tag x={tw.x} y={tagY(1) - (variant === 'b' ? 80 : 0)} value={29} f={f} s={1} warn bpm={130} />
+					<Actor who="hero" x={w.x} floor={FL} s={HS} facing={1} faceTurn={0.4} look={[0.9, 0]} expr="angry" mouth="open" pose={w.pose} vx={w.vx} bob={w.bob} uid={'h4' + variant} />
 					<g transform={`translate(${w.x - 52},${hip(HS) - 128})`}>
 						<rect width={44} height={86} rx={12} fill="#3a4256" stroke="#10132a" strokeWidth={3} />
 						<rect x={8} y={-26} width={14} height={40} rx={6} fill="#e2483a" />
@@ -203,32 +229,43 @@ const S4: React.FC = () => {
 		</Stage>
 	);
 };
+const S4a = mkPush('a');
+const S4b = mkPush('b');
 
-/* 006 N: заголовок, табличка трескается в 0 и собирается обратно */
+/* 006 N: заголовок = слова рассказчика («Что если бы над тобой висел счётчик дней, который сгорает за один пропуск?»);
+   слова появляются в такт голосу; на «сгорает» табличка трескается в 0, на «пропуск» собирается обратно */
+const TITLE: [string, number][][] = [
+	[['ЧТО', 0], ['ЕСЛИ', 7], ['БЫ', 16], ['НАД', 24], ['ТОБОЙ', 31], ['ВИСЕЛ', 42]],
+	[['СЧЁТЧИК', 52], ['ДНЕЙ,', 65], ['КОТОРЫЙ', 80], ['СГОРАЕТ', 92]],
+	[['ЗА', 106], ['ОДИН', 111], ['ПРОПУСК?', 119]],
+];
 const S5: React.FC = () => {
 	const {f, gf, at} = useShot();
-	const crack = grow(f, 22, 3);
-	const mend = grow(f, 70, 14);
-	const shake = crack * (1 - mend) * Math.sin(f * 2.1) * 6;
+	const e = f - at('006');
+	const crack = grow(e, 94, 3);
+	const mend = grow(e, 128, 14);
+	const broken = crack > 0 && mend < 1;
+	const shake = broken ? crack * (1 - mend) * Math.sin(f * 2.1) * 6 : 0;
 	const v = counterAt(gf);
-	const pop = 1 + 0.15 * Math.exp(-Math.max(0, f - 22) / 5) * crack;
-	const title = grow(f, 4, 12);
+	const pop = 1 + 0.15 * Math.exp(-Math.max(0, e - 94) / 5) * crack;
 	return (
 		<Board tint="#241638">
-			<g opacity={title} transform={`translate(0,${(1 - title) * -30})`}>
-				<text x={960} y={210} textAnchor="middle" fontSize={92} fontFamily={FONT} fontWeight={900} fill="#fff">
-					ЧТО ЕСЛИ БЫ ОДИН ПРОПУСК
+			{TITLE.map((line, li) => (
+				<text key={li} x={960} y={190 + li * 120} textAnchor="middle" fontSize={96} fontFamily={FONT} fontWeight={900} fill={li === 2 ? '#ffc94a' : '#fff'}>
+					{line.map(([w, t], i) => (
+						<tspan key={i} fillOpacity={interpolate(e, [t, t + 6], [0, 1], clamp)}>
+							{w}
+							{i < line.length - 1 ? ' ' : ''}
+						</tspan>
+					))}
 				</text>
-				<text x={960} y={320} textAnchor="middle" fontSize={92} fontFamily={FONT} fontWeight={900} fill="#ffc94a">
-					ОБНУЛЯЛ 30 ДНЕЙ БОКСА?
-				</text>
-			</g>
-			<g transform={`translate(${shake},${540})`}>
-				<Tag x={880} y={0} value={v} f={f} s={3.1 * pop} warn={crack > 0 && mend < 1} bpm={crack > 0 && mend < 1 ? 0 : 90} />
+			))}
+			<g transform={`translate(${shake},${800})`}>
+				<Tag x={880} y={0} value={v} f={f} s={2.6 * pop} warn={broken} bpm={broken ? 0 : 90} />
 				{crack > 0 && mend < 0.5 ? (
 					<g stroke="#fff" strokeWidth={6} fill="none" strokeLinecap="round" opacity={1 - mend * 2}>
-						<path d="M760,-70 L800,-10 L770,30 L830,90" />
-						<path d="M980,-90 L950,-30 L1010,10 L970,80" />
+						<path d="M770,-60 L810,-10 L780,30 L840,80" />
+						<path d="M980,-80 L950,-30 L1010,10 L970,70" />
 					</g>
 				) : null}
 			</g>
@@ -358,8 +395,8 @@ const S9: React.FC = () => {
 					<Actor who="hero" x={w.x} floor={FL} s={HS} facing={1} faceTurn={0.4} look={[0.6, up > 0.5 ? -0.8 : 0]} expr={up > 0.5 ? 'wide' : 'normal'} pose={p} vx={w.vx} bob={w.bob} uid="h9" />
 					{counterAt(gf) >= 1 ? (
 						<>
-							<HeroBadge x={w.x} y={tagY(HS)} s={0.8} />
-							<Heart x={w.x + 150} y={tagY(HS) - 4} f={f} bpm={72} s={0.8} />
+							<HeroBadge x={w.x} y={tagY(HS)} s={1.04} />
+							<Heart x={w.x + 150} y={tagY(HS) - 4} f={f} bpm={72} s={1.04} />
 						</>
 					) : null}
 				</Svg>
@@ -370,7 +407,7 @@ const S9: React.FC = () => {
 };
 
 /* люди в зале с табличками */
-const PersonTag: React.FC<{x: number; s: number; v: number; f: number; bpm?: number}> = ({x, s, v, f, bpm = 70}) => <Tag x={x} y={tagY(s)} value={v} f={f} s={0.7} bpm={bpm} />;
+const PersonTag: React.FC<{x: number; s: number; v: number; f: number; bpm?: number}> = ({x, s, v, f, bpm = 70}) => <Tag x={x} y={tagY(s)} value={v} f={f} s={0.91} bpm={bpm} />;
 
 /* 012 N + 013 N: панорама зала; дед со скакалкой (1 400), девушка у груши (212) */
 const S10: React.FC = () => {
@@ -389,7 +426,7 @@ const S10: React.FC = () => {
 		if (d > 0) bag += 4 * Math.exp(-d / 16) * Math.cos(d / 5);
 	}
 	let ep = guard(idle(gf, 7), 0.6);
-	const pan = interpolate(f, [0, at('013') + 30, at('013') + 150], [700, 940, 1380], {...clamp, easing: ease});
+	const pan = interpolate(f, [0, at('013') + 30, at('013') + 150], [700, 940, 1320], {...clamp, easing: ease});
 	const cam = camOn(pan, 560, 1.3);
 	return (
 		<Stage cam={cam} bg="#25324a" light={{x: 20, y: 10, o: 0.4}}>
@@ -399,16 +436,16 @@ const S10: React.FC = () => {
 			<Layer depth={1}>
 				<Svg>
 					<Actor who="hero" x={450} floor={FL} s={HS} facing={1} faceTurn={0.4} look={[0.9, 0]} expr="wide" pose={idle(gf, 1)} uid="h10" />
-					<HeroBadge x={450} y={tagY(HS)} s={0.8} />
-					<Heart x={600} y={tagY(HS) - 4} f={f} bpm={72} s={0.8} />
+					<HeroBadge x={450} y={tagY(HS)} s={1.04} />
+					<Heart x={600} y={tagY(HS) - 4} f={f} bpm={72} s={1.04} />
 					<Extra i={3} x={760} floor={FL} s={0.96} facing={1} pose={{...idle(gf, 8), armF: [-80 + Math.sin(f / 6) * 20, 30], armB: [80, 30]}} seed="g" />
 					<PersonTag x={760} s={0.96} v={7} f={f} />
 					<Actor who="grandpa" x={1130} floor={FL} s={1} facing={-1} faceTurn={0.5} look={[-0.3, 0.2]} expr="normal" pose={gp} bob={jump * 14} uid="g10" />
 					<Rope p={gp} x={1130} s={1} facing={-1} a={ga} c="#3fc1c9" />
-					<Tag x={1130} y={tagY(1) - jump * 14} value={1400} f={f} s={0.72} bpm={65} />
+					<Tag x={1130} y={tagY(1) - jump * 14} value={1400} f={f} s={0.94} bpm={65} />
 					<Bag x={1500} angle={bag} />
 					<Actor who="girl" x={1560} floor={FL} s={1} facing={-1} faceTurn={0.5} look={[-0.9, 0]} expr="angry" pose={lp} uid="l10" />
-					<Tag x={1560} y={tagY(1)} value={212} f={f} s={0.72} bpm={110} />
+					<Tag x={1560} y={tagY(1)} value={212} f={f} s={0.94} bpm={110} />
 					<Extra i={5} x={1870} floor={FL} s={0.97} facing={-1} pose={ep} seed="e" />
 					<PersonTag x={1870} s={0.97} v={19} f={f} bpm={90} />
 					<Callout f={f} t0={at('013') + 12} t1={at('013') + 64} from={[1130, 560]} to={[1130, 330]} text="1 400" align="center" size={44} />
@@ -449,8 +486,8 @@ const S11: React.FC = () => {
 				<Svg>
 					<Actor who="vovan" x={1180} floor={FL} s={vs} facing={-1} faceTurn={0.6} look={[-0.9, 0]} expr="normal" mouth={pose1 > 0.5 ? 'smirk' : undefined} pose={vp} uid="v11" />
 					<g transform={`translate(0,${-fix * 8})`}>
-						<Tag x={1180} y={tagY(vs) - 6} value={41} f={f} s={0.9} bpm={60} />
-						<path d={`M1130,${tagY(vs) - 40} l14,-34 l22,22 l22,-30 l22,30 l22,-22 l14,34 Z`} fill="#ffd34a" stroke="#10132a" strokeWidth={4} opacity={grow(f, at('014') + 90, 10)} transform="translate(-16,0)" />
+						<Tag x={1180} y={tagY(vs) - 12} value={41} f={f} s={1.17} bpm={60} />
+						<path d={`M1130,${tagY(vs) - 66} l14,-34 l22,22 l22,-30 l22,30 l22,-22 l14,34 Z`} fill="#ffd34a" stroke="#10132a" strokeWidth={4} opacity={grow(f, at('014') + 90, 10)} transform="translate(-16,0)" />
 					</g>
 					<Actor who="hero" x={720} floor={FL} s={HS} facing={1} faceTurn={0.5} look={[0.9, 0]} expr="normal" pose={idle(gf, 1)} uid="h11" />
 									</Svg>
@@ -484,8 +521,8 @@ const S12: React.FC = () => {
 			<Layer depth={1}>
 				<Svg>
 					<Actor who="hero" x={640} floor={FL} s={HS} facing={1} faceTurn={0.4} look={[0.8, 0]} expr="normal" pose={hp} uid="h12" />
-					<HeroBadge x={640} y={tagY(HS)} s={0.8} />
-					<Heart x={790} y={tagY(HS) - 4} f={f} bpm={72} s={0.8} />
+					<HeroBadge x={640} y={tagY(HS)} s={1.04} />
+					<Heart x={790} y={tagY(HS) - 4} f={f} bpm={72} s={1.04} />
 					<Actor who="trainer" x={tw.x} floor={FL} s={1.02} facing={-1} faceTurn={0.6} look={[-0.9, 0]} pose={tp} vx={tw.vx} bob={tw.bob} uid="t12" />
 					{fl < 1 ? (
 						<g transform={`translate(${wx},${wy}) rotate(${f * 14})`}>
@@ -576,8 +613,8 @@ const S14: React.FC = () => {
 				<Svg>
 					<Actor who="trainer" x={1060} floor={FL} s={1.02} facing={1} faceTurn={0.6} look={[0.9, -0.3]} pose={tp} uid="t14" />
 					<Actor who="hero" x={640} floor={FL} s={HS} facing={1} faceTurn={0.4} look={[0.9, -0.1]} expr="normal" pose={idle(gf, 1)} uid="h14" />
-					<HeroBadge x={640} y={tagY(HS)} s={0.8} />
-					<Heart x={790} y={tagY(HS) - 4} f={f} bpm={72} s={0.8} />
+					<HeroBadge x={640} y={tagY(HS)} s={1.04} />
+					<Heart x={790} y={tagY(HS) - 4} f={f} bpm={72} s={1.04} />
 					<Onoma x={1250} y={700} text="ТУК" t={f - (at('018') + 20)} c="#fff" rot={-6} size={48} />
 				</Svg>
 			</Layer>
@@ -610,8 +647,8 @@ const S15: React.FC = () => {
 						</g>
 					))}
 					<Actor who="hero" x={400} floor={FL} s={HS} facing={1} faceTurn={0.4} look={[0.6, -0.2]} expr="worried" pose={idle(gf, 1)} uid="h15" />
-					<HeroBadge x={400} y={tagY(HS)} s={0.8} />
-					<Heart x={550} y={tagY(HS) - 4} f={f} bpm={72} s={0.8} />
+					<HeroBadge x={400} y={tagY(HS)} s={1.04} />
+					<Heart x={550} y={tagY(HS) - 4} f={f} bpm={72} s={1.04} />
 				</Svg>
 			</Layer>
 		</Stage>
@@ -671,10 +708,10 @@ const S17: React.FC = () => {
 			<Layer depth={1}>
 				<Svg>
 					<Actor who="hero" x={860} floor={FL} s={HS} facing={1} faceTurn={0.5} look={[0.9, 0.2]} expr="normal" mouth={laugh > 0.5 ? 'smile' : undefined} pose={hp} uid="h17" />
-					<HeroBadge x={860} y={tagY(HS)} s={0.8} />
-					<Heart x={1010} y={tagY(HS) - 4} f={f} bpm={72} s={0.8} />
+					<HeroBadge x={860} y={tagY(HS)} s={1.04} />
+					<Heart x={1010} y={tagY(HS) - 4} f={f} bpm={72} s={1.04} />
 					<Actor who="tema" x={tin.x} floor={FL} s={1} facing={-1} faceTurn={0.5} look={[-0.9, 0.3]} expr={laugh > 0.5 ? 'normal' : 'worried'} mouth={laugh > 0.5 ? 'smile' : undefined} pose={tp} vx={tin.vx} bob={tin.bob} uid="t17" />
-					<Tag x={tin.x} y={tagY(1)} value={1} f={f} s={0.8} bpm={72} />
+					<Tag x={tin.x} y={tagY(1)} value={1} f={f} s={1.04} bpm={72} />
 					{/* бинт, размотанный на полметра, путается у ног */}
 					<path d={`M${wrapEnd[0]},${wrapEnd[1]} C${wrapEnd[0] - 40},${FL - 120} ${wrapEnd[0] + 80 * unr},${FL - 10} ${wrapEnd[0] - 120 * unr},${FL + 20} S${wrapEnd[0] - 260 * unr},${FL + 6} ${wrapEnd[0] - 300 * unr},${FL + 30}`} stroke={WRAP} strokeWidth={14} fill="none" strokeLinecap="round" />
 					<Onoma x={1000} y={640} text="ХА-ХА" t={f - (at('023') + 34)} c="#ffd34a" rot={-6} size={48} />
@@ -709,13 +746,13 @@ const S18: React.FC = () => {
 				<Svg>
 					<Actor who="hero" x={760} floor={FL} s={HS} facing={1} faceTurn={0.4} look={[0.4, 0.5]} expr={trip > 0.4 ? 'wide' : 'normal'} pose={hp} bob={jmp * 14} squash={trip * 0.06} uid="h18" />
 					<Rope p={hp} x={760} s={HS} facing={1} a={a} c="#ffd34a" k={f > start - 4 ? 1 : 0.0} />
-					<HeroBadge x={760} y={tagY(HS) - jmp * 14} s={0.8} />
+					<HeroBadge x={760} y={tagY(HS) - jmp * 14} s={1.04} />
 					<Actor who="tema" x={1010} floor={FL} s={1} facing={-1} faceTurn={0.4} look={[-0.4, 0.5]} expr="normal" pose={tm} bob={jt * 14} uid="t18" />
 					<Rope p={tm} x={1010} s={1} facing={-1} a={a * 0.9 + 1} c="#e86aa0" k={f > start - 4 ? 1 : 0} />
-					<Tag x={1010} y={tagY(1) - jt * 14} value={1} f={f} s={0.8} bpm={80} />
+					<Tag x={1010} y={tagY(1) - jt * 14} value={1} f={f} s={1.04} bpm={80} />
 					<Actor who="trainer" x={tw.x} floor={FL} s={1.02} facing={-1} faceTurn={0.6} look={[-0.9, 0]} pose={tp} vx={tw.vx} bob={tw.bob} uid="t18b" />
 					<Onoma x={790} y={850} text="ШЛЁП" t={f - (start + 44)} c="#ffd34a" rot={-8} size={50} />
-					<Callout f={f} t0={at('024') + 8} t1={at('024') + 56} from={[tw.x - 40, 700]} to={[tw.x - 200, 470]} text="10 МИНУТ" align="center" size={40} />
+					<Callout f={f} t0={at('024') + 8} t1={at('024') + 56} from={[tw.x - 40, 700]} to={[tw.x + 10, 440]} text="10 МИНУТ" align="center" size={40} />
 				</Svg>
 			</Layer>
 		</Stage>
@@ -742,11 +779,11 @@ const S19: React.FC = () => {
 			<Layer depth={1}>
 				<Svg>
 					<Actor who="hero" x={700} floor={FL} s={HS} facing={1} faceTurn={0.5} look={[0.9, 0]} expr="wide" pose={idle(gf, 1)} uid="h19" />
-					<HeroBadge x={700} y={tagY(HS)} s={0.8} />
-					<Heart x={850} y={tagY(HS) - 4} f={f} bpm={72} s={0.8} />
+					<HeroBadge x={700} y={tagY(HS)} s={1.04} />
+					<Heart x={850} y={tagY(HS) - 4} f={f} bpm={72} s={1.04} />
 					<rect x={1180} y={FL - 36} width={64} height={36} rx={10} fill="#3a4256" stroke="#10132a" strokeWidth={3} opacity={f < at('025') + 52 ? 1 : 0} />
 					<Actor who="tema" x={run.x} floor={FL} s={1} facing={f < at('025') + 56 ? -1 : 1} faceTurn={0.5} look={[0.9, 0]} expr="worried" pose={tp} vx={run.vx} bob={run.bob} uid="t19" />
-					<Tag x={run.x} y={tagY(1)} value={1} f={f} s={0.8} bpm={f < at('025') + 56 ? 80 : 120} />
+					<Tag x={run.x} y={tagY(1)} value={1} f={f} s={1.04} bpm={f < at('025') + 56 ? 80 : 120} />
 					<Onoma x={1860} y={620} text="ХЛОП!" t={f - (at('025') + 100)} c="#ffd34a" rot={-8} size={64} />
 				</Svg>
 			</Layer>
@@ -766,8 +803,11 @@ const Pending: React.FC = () => (
 export const SHOTS: ShotDef[] = [
 	{at: '001', C: S1},
 	{at: '002', C: S2},
-	{at: '004', C: S3},
-	{at: '005', C: S4},
+	{at: '004', C: S3c},
+	{at: '004', off: 55, C: S3a},
+	{at: '004', off: 130, C: S3b},
+	{at: '005', C: S4a},
+	{at: '005', off: 34, C: S4b},
 	{at: '006', C: S5, own: true, ownCuts: []},
 	{at: '007', C: S6, own: true, ownCuts: [], whip: true},
 	{at: '008', C: S7, whip: true},
