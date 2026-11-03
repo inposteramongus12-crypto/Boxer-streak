@@ -60,6 +60,11 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
       - run: npm ci
+      - name: Права на бинарники Remotion (ffmpeg, ffprobe, compositor)
+        run: |
+          find node_modules/@remotion -path '*compositor-*' -type f \( -name ffmpeg -o -name ffprobe -o -name remotion \) -exec chmod +x {} +
+          ls -l node_modules/@remotion/compositor-*/ffmpeg node_modules/@remotion/compositor-*/ffprobe
+          node_modules/@remotion/compositor-*/ffmpeg -version | head -1
       - name: Системные библиотеки для браузера Remotion
         run: |
           sudo apt-get update -y
@@ -116,6 +121,11 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
       - run: npm ci # ffmpeg лежит внутри Remotion (node_modules/@remotion/compositor-*)
+      - name: Права на бинарники Remotion (ffmpeg, ffprobe, compositor)
+        run: |
+          find node_modules/@remotion -path '*compositor-*' -type f \( -name ffmpeg -o -name ffprobe -o -name remotion \) -exec chmod +x {} +
+          ls -l node_modules/@remotion/compositor-*/ffmpeg node_modules/@remotion/compositor-*/ffprobe
+          node_modules/@remotion/compositor-*/ffmpeg -version | head -1
       - uses: actions/download-artifact@v4
         with:
           pattern: chunk-*
