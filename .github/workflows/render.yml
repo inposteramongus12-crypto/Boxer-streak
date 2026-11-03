@@ -1,0 +1,151 @@
+name: render
+
+# Ручной запуск: рендерит кусок ролика Long параллельной матрицей и склеивает его в один mp4.
+# Ключи и .env не нужны: озвучка лежит в public/vo/, шрифты — в public/fonts/.
+on:
+  workflow_dispatch:
+    inputs:
+      range:
+        description: 'Диапазон: lines:001-025 (номера реплик) или frames:0-3212 (кадры). Весь ролик: lines:001-175'
+        required: true
+        default: 'lines:001-025'
+      chunk:
+        description: 'Размер куска, кадров'
+        required: true
+        default: '150'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: render-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  NODE_VERSION: '22.23.4' # как у нас локально (node -v)
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      matrix: ${{ steps.plan.outputs.matrix }}
+      count: ${{ steps.plan.outputs.count }}
+      label: ${{ steps.plan.outputs.label }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Посчитать куски
+        id: plan
+        env:
+          RANGE: ${{ inputs.range }}
+          CHUNK: ${{ inputs.chunk }}
+        run: node tools/plan-chunks.mjs --range "$RANGE" --chunk "$CHUNK" --github-output
+
+  render:
+    needs: plan
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false # упавший кусок не отменяет остальные: его можно перезапустить через «Re-run failed jobs»
+      max-parallel: 10
+      matrix: ${{ fromJson(needs.plan.outputs.matrix) }}
+    name: ${{ matrix.name }} (${{ matrix.from }}-${{ matrix.to }})
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - name: Системные библиотеки для браузера Remotion
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y --no-install-recommends libnss3 libdbus-1-3 libatk1.0-0 libatk-bridge2.0-0 libgbm-dev libasound2t64 \
+            libxrandr2 libxkbcommon-dev libxfixes3 libxcomposite1 libxdamage1 libcups2 libpango-1.0-0 libcairo2 fonts-liberation
+      - name: Кэш браузера Remotion
+        uses: actions/cache@v4
+        with:
+          path: node_modules/.remotion
+          key: remotion-browser-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+      - run: npx remotion browser ensure
+      - name: Рендер куска (с одним повтором)
+        env:
+          NAME: ${{ matrix.name }}
+          FROM: ${{ matrix.from }}
+          TO: ${{ matrix.to }}
+        run: |
+          set -u
+          mkdir -p out/chunks
+          # вкладок столько же, сколько в render.json (long.concurrency = 3), но не больше ядер раннера и не больше 4
+          C=$(node -e "console.log(JSON.parse(require('fs').readFileSync('src/story/render.json','utf8')).long?.concurrency ?? 3)")
+          N=$(nproc); [ "$C" -gt "$N" ] && C=$N
+          [ "$C" -gt 4 ] && C=4
+          ok=0
+          for attempt in 1 2; do
+            conc=$C
+            [ "$attempt" -eq 2 ] && conc=$(( (C + 1) / 2 )) # повтор — легче: меньше вкладок
+            echo "attempt $attempt, tabs $conc"
+            if npx remotion render Long "out/chunks/$NAME.mp4" --frames="$FROM-$TO" --muted --gl=angle \
+                 --concurrency="$conc" --crf=18 --log=error --timeout=120000; then
+              ok=1
+              break
+            fi
+            echo "::warning::chunk $NAME failed on attempt $attempt"
+            rm -f "out/chunks/$NAME.mp4"
+          done
+          [ "$ok" -eq 1 ] && [ -s "out/chunks/$NAME.mp4" ]
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chunk-${{ matrix.name }}
+          path: out/chunks/${{ matrix.name }}.mp4
+          retention-days: 3
+          compression-level: 0
+          if-no-files-found: error
+
+  join:
+    needs: [plan, render]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci # ffmpeg лежит внутри Remotion (node_modules/@remotion/compositor-*)
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: chunk-*
+          path: chunks
+          merge-multiple: true
+      - name: Склеить куски, смешать звук, выровнять до −16 LUFS
+        env:
+          RANGE: ${{ inputs.range }}
+          CHUNK: ${{ inputs.chunk }}
+          COUNT: ${{ needs.plan.outputs.count }}
+        run: |
+          set -eu
+          mkdir -p out
+          have=$(ls chunks/*.mp4 | wc -l)
+          [ "$have" -eq "$COUNT" ] || { echo "::error::expected $COUNT chunks, found $have"; exit 1; }
+          node tools/plan-chunks.mjs --range "$RANGE" --chunk "$CHUNK" --write-timeline out/timeline_range.json
+          FF=$(node -e "import('./tools/lib.mjs').then(m=>console.log(m.ffbin()))")
+          (cd chunks && for f in $(ls c*.mp4 | sort); do echo "file '$f'"; done) > chunks/list.txt
+          "$FF" -hide_banner -v error -y -f concat -safe 0 -i chunks/list.txt -c copy out/video.mp4
+          node tools/mix-audio.mjs out/timeline_range.json public/sfx/bed.wav 1 out/mix.wav
+          node tools/loudness.mjs out/mix.wav out/video.mp4 "out/${{ needs.plan.outputs.label }}.mp4" -16
+      - name: Проверка готового файла (не блокирует)
+        continue-on-error: true
+        env:
+          CHUNK: ${{ inputs.chunk }}
+        run: node tools/check-video.mjs "out/${{ needs.plan.outputs.label }}.mp4" --chunk "$CHUNK"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video-${{ needs.plan.outputs.label }}
+          path: out/${{ needs.plan.outputs.label }}.mp4
+          retention-days: 14
+          compression-level: 0
+          if-no-files-found: error
