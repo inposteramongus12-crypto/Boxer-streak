@@ -320,7 +320,7 @@ const KnotTimer: React.FC<{e: number}> = ({e}) => {
 		</div>
 	);
 };
-const Knot: React.FC<{x: number; y: number; s: number; e: number; teeth?: number}> = ({x, y, s, e, teeth = 0}) => (
+export const Knot: React.FC<{x: number; y: number; s: number; e: number; teeth?: number}> = ({x, y, s, e, teeth = 0}) => (
 	<g transform={`translate(${x},${y}) scale(${s})`}>
 		<circle r={190} fill="#1a2150" stroke="#7fe0ff" strokeWidth={8} />
 		{/* туго затянутый узел из петель */}

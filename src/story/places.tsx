@@ -483,3 +483,86 @@ export const Cinema: React.FC<{f: number}> = ({f}) => (
 		))}
 	</Svg>
 );
+
+/* ---------- Диван (передний план: спинка и сиденье) ---------- */
+export const Couch: React.FC<{x0: number; x1: number}> = ({x0, x1}) => (
+	<g>
+		<rect x={x0} y={700} width={x1 - x0} height={90} rx={20} fill="#5a6fa8" stroke="#10132a" strokeWidth={5} />
+		<rect x={x0 - 30} y={760} width={x1 - x0 + 60} height={110} rx={20} fill="#4a5e96" stroke="#10132a" strokeWidth={5} />
+		<rect x={x0 - 40} y={700} width={50} height={170} rx={20} fill="#3f5183" stroke="#10132a" strokeWidth={5} />
+		<rect x={x1 - 10} y={700} width={50} height={170} rx={20} fill="#3f5183" stroke="#10132a" strokeWidth={5} />
+		<rect x={x0 + 20} y={866} width={26} height={34} fill="#2a1a10" />
+		<rect x={x1 - 46} y={866} width={26} height={34} fill="#2a1a10" />
+	</g>
+);
+
+/* ---------- Актовый зал: сцена с занавесом, софиты; в кадре передний ряд кресел ---------- */
+export const ConcertHall: React.FC<{f: number; open?: number}> = ({f, open = 1}) => (
+	<Svg>
+		<defs>
+			<linearGradient id="ch-w" x1="0" y1="0" x2="0" y2="1">
+				<stop offset="0" stopColor="#241a36" />
+				<stop offset="1" stopColor="#3a2a4a" />
+			</linearGradient>
+			<radialGradient id="ch-s" cx="0.5" cy="0" r="1">
+				<stop offset="0" stopColor="#fff3c0" stopOpacity={0.8} />
+				<stop offset="1" stopColor="#fff3c0" stopOpacity={0} />
+			</radialGradient>
+		</defs>
+		<rect x={-400} y={-300} width={2800} height={1300} fill="url(#ch-w)" />
+		<rect x={240} y={560} width={1440} height={170} fill="#7a5a3a" />
+		<rect x={240} y={548} width={1440} height={16} fill="#b98a5c" />
+		<rect x={300} y={60} width={1320} height={500} fill="#3a2a4a" />
+		{/* занавес раздвигается на open (0 — закрыт) */}
+		<rect x={300} y={40} width={(1 - open) * 660 + 140} height={520} fill="#b3281f" />
+		<rect x={1620 - ((1 - open) * 660 + 140)} y={40} width={(1 - open) * 660 + 140} height={520} fill="#b3281f" />
+		{[0, 1, 2, 3, 4, 5].map((i) => <rect key={i} x={320 + i * 36} y={40} width={10} height={520} fill="#7a1812" opacity={0.6} />)}
+		<rect x={300} y={30} width={1320} height={30} fill="#e2b04a" />
+		<polygon points="760,60 1160,60 1380,560 540,560" fill="url(#ch-s)" opacity={0.35 + Math.sin(f / 20) * 0.03} />
+		<rect x={-400} y={730} width={2800} height={600} fill="#2a2038" />
+		{[0, 1, 2, 3, 4].map((i) => <rect key={i} x={-120 + i * 480} y={900} width={380} height={160} rx={44} fill="#6b1f3a" />)}
+	</Svg>
+);
+
+/* ---------- Ночная дорога: фонари и дома бегут слева направо при scroll>0 ---------- */
+export const NightRoad: React.FC<{scroll: number}> = ({scroll}) => {
+	const m = (v: number, p: number) => ((v % p) + p) % p;
+	return (
+		<Svg>
+			<defs>
+				<linearGradient id="nr-s" x1="0" y1="0" x2="0" y2="1">
+					<stop offset="0" stopColor="#070a22" />
+					<stop offset="1" stopColor="#2a2f63" />
+				</linearGradient>
+				<radialGradient id="nr-l" cx="0.5" cy="0" r="1">
+					<stop offset="0" stopColor="#ffe9a8" stopOpacity={0.7} />
+					<stop offset="1" stopColor="#ffe9a8" stopOpacity={0} />
+				</radialGradient>
+			</defs>
+			<rect x={-400} y={-300} width={2800} height={1300} fill="url(#nr-s)" />
+			{Array.from({length: 9}).map((_, i) => {
+				const x = -300 + m(i * 330 - scroll * 0.35, 2970);
+				const h = 260 + ((i * 97) % 220);
+				return (
+					<g key={i}>
+						<rect x={x} y={900 - h - 100} width={290} height={h + 100} fill="#171c3c" />
+						{[0, 1, 2].map((r) => [0, 1].map((c) => <rect key={`${r}${c}`} x={x + 40 + c * 120} y={900 - h - 60 + r * 80} width={60} height={46} fill={(i + r + c) % 3 === 0 ? '#ffd98a' : '#00000055'} />))}
+					</g>
+				);
+			})}
+			<rect x={-400} y={900} width={2800} height={400} fill="#23263a" />
+			<rect x={-400} y={896} width={2800} height={10} fill="#4a4e6a" />
+			{Array.from({length: 6}).map((_, i) => <rect key={i} x={-300 + m(i * 520 - scroll * 1.1, 3120)} y={990} width={220} height={14} fill="#c8c8d0" opacity={0.55} />)}
+			{Array.from({length: 6}).map((_, i) => {
+				const x = -200 + m(i * 560 - scroll * 0.85, 3360);
+				return (
+					<g key={i}>
+						<polygon points={`${x - 30},120 ${x + 30},120 ${x + 210},900 ${x - 210},900`} fill="url(#nr-l)" opacity={0.4} />
+						<line x1={x} y1={120} x2={x} y2={900} stroke="#10132a" strokeWidth={12} />
+						<ellipse cx={x} cy={118} rx={44} ry={10} fill="#fff3b0" />
+					</g>
+				);
+			})}
+		</Svg>
+	);
+};

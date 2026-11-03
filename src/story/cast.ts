@@ -15,6 +15,8 @@ export const CAST: Record<string, CastMember> = {
 	kid: {color: '#4aa8d8', hair: 'spiky', hairColor: '#5a3a22', rim: '#e6f6ff', rimW: 2.4, shoe: '#f2f2f2'},
 	tmom: {color: '#3aa3a3', outfit: 'coat', hair: 'bun', hairColor: '#4a3426', rim: '#e6fffb', rimW: 2.4, shoe: '#f2f2f2'},
 	bro: {color: '#2f6fd8', hair: 'short', hairColor: '#5a3a22', rim: '#e6f0ff', rimW: 2.4, shoe: '#f2f2f2'},
+	sis: {color: '#e86aa0', hair: 'ponytail', hairColor: '#5a3a22', rim: '#ffe6f0', rimW: 2.4, shoe: '#f2f2f2'},
+	ygpa: {color: '#6b7f8e', outfit: 'tee', hair: 'short', hairColor: '#5a4636', rim: '#eef4ff', rimW: 2.4, shoe: '#2b2f3a'},
 	friend: {color: '#d94a3a', hair: 'cap', hairColor: '#2f6fd8', rim: '#ffe0c8', rimW: 2.4, shoe: '#f2f2f2'},
 	mom: {color: '#7a5cc4', outfit: 'gown', hair: 'bob', rim: '#ffe6c8', rimW: 2.4, shoe: '#2c2540'},
 	girl: {color: '#8b5cf6', hair: 'ponytail', hairColor: '#ffd34a', acc: ['headphones'], rim: '#efe2ff', rimW: 2.4, shoe: '#efe2ff'},
