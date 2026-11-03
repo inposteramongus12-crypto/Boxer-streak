@@ -36,7 +36,7 @@ const S77: React.FC = () => {
 	const hw = walkTo(e, 40, 104, 40, 1190, 3, 0.42);
 	const hide = grow(e, 104, 10);
 	const hp = flip(hw.pose, 1);
-	const cam = camOn(Math.min(1250, (tw.x + hw.x) / 2 + 160), 570, 1.15 + 0.1 * hide);
+	const cam = camOn(Math.max(450, Math.min(1250, (tw.x + hw.x) / 2)), 570, 1.15 + 0.1 * hide);
 	return (
 		<Stage cam={cam} bg={EVE} light={{x: 70, y: 10, o: 0.4}}>
 			<Layer depth={1.6}>
@@ -64,7 +64,7 @@ const S78: React.FC = () => {
 	const look = env(e, 56, 110, 8, 8);
 	let mp = idle(gf, 5);
 	mp = hand(mp, 800, 1, -1, 'F', [800 - 40, hip(1) - 80], look);
-	const cam = usePush(camOn(760, 560, 1.15), camOn(1000, 560, 1.3));
+	const cam = usePush(camOn(800, 560, 1.2), camOn(1100, 560, 1.2));
 	return (
 		<Stage cam={cam} bg={EVE} light={{x: 60, y: 10, o: 0.4}}>
 			<Layer depth={1.6}>
@@ -301,7 +301,7 @@ const mkCount = (first: string): React.FC => () => {
 					<Actor who="hero" x={1300} floor={FL} s={HS} facing={-1} faceTurn={0.4} look={[-0.8, 0]} expr="normal" pose={hp} uid={'h88' + first} />
 					<Pads2 a={padsA} b={padsB} />
 					<HT x={1300} s={1} auto showBpm bpm={120} yy={tagY(HS)} />
-					{laugh > 0.1 ? <Onoma x={tx + 40} y={560} text="ХА-ХА" t={e - 64} c="#ffd34a" rot={-6} size={52} /> : null}
+					{laugh > 0.1 ? <Onoma x={tx - 170} y={600} text="ХА-ХА" t={e - 64} c="#ffd34a" rot={-6} size={52} /> : null}
 				</Svg>
 			</Layer>
 		</Stage>
@@ -350,8 +350,12 @@ const mkKnot = (variant: 'a' | 'b'): React.FC => () => {
 	const hd = rigPoints(tp).head;
 	const hx = tx + hd[0];
 	const hy = seat + hd[1];
-	const cam = variant === 'a' ? usePush(camOn(1070, 700, 1.85), camOn(1080, 710, 2.1)) : usePush(camOn(1040, 640, 1.7), camOn(1040, 650, 1.95));
-	const hp: Pose = {...idle(gf, 1), lean: idle(gf, 1).lean};
+	const cam = variant === 'a' ? usePush(camOn(1070, 700, 1.85), camOn(1080, 710, 2.1)) : usePush(camOn(1180, 570, 1.12), camOn(1190, 575, 1.22));
+	const hxw = 1480 + Math.sin(e / 7) * 50;
+	const bobw = Math.abs(Math.sin(e / 3.5)) * 10;
+	const paw: [number, number] = [hxw - 100, 620 + Math.sin(e / 5) * 16];
+	const pbw: [number, number] = [hxw - 108, 690 + Math.cos(e / 5) * 16];
+	const hpw = reach(reach(idle(gf, 1), 'F', toLocal(paw[0], paw[1], hxw, hip(HS), HS, -1), 1), 'B', toLocal(pbw[0], pbw[1], hxw, hip(HS), HS, -1), 1);
 	return (
 		<Stage cam={cam} bg={EVE} light={{x: 60, y: 10, o: 0.4}}>
 			<Layer depth={1.6}>
@@ -362,9 +366,15 @@ const mkKnot = (variant: 'a' | 'b'): React.FC => () => {
 					{shadow(tx, 1.4)}
 					<Actor who="tema" x={tx} floor={FL} seat={seat} s={1} facing={1} faceTurn={0.3} look={[0.5, 0.9]} expr="worried" mouth={variant === 'b' ? 'open' : 'flat'} pose={tp} uid={'t90' + variant} />
 					{variant === 'b' ? <path d={`M${tx + 110},${seat + 76} C${tx + 90},${seat + 20} ${hx + 36},${hy + 40} ${hx + 36},${hy + 28}`} stroke="#f4f1e6" strokeWidth={7} fill="none" /> : null}
-					<Tag x={hx - 10} y={hy - 130} value={15} f={f} s={1.3} heart auto showBpm bpm={150} />
-					<Actor who="hero" x={1500} floor={FL} s={HS} facing={-1} faceTurn={0.4} look={[-0.8, 0.3]} expr="normal" pose={hp} uid={'h90' + variant} />
-					<Knot x={1430} y={720} s={variant === 'a' ? 0.82 : 0.78} e={e} />
+					<Tag x={hx - 10} y={hy - 130} value={18} f={f} s={1.3} heart auto showBpm bpm={150} />
+					{variant === 'b' ? (
+						<g>
+							<Actor who="hero" x={hxw} floor={FL} s={HS} facing={-1} faceTurn={0.4} look={[-0.8, 0.2]} expr="angry" pose={hpw} bob={bobw} uid="h90b" />
+							<Pads2 a={paw} b={pbw} />
+							<HT x={hxw} s={1.05} auto showBpm bpm={150} yy={tagY(HS) - bobw} />
+						</g>
+					) : null}
+					{variant === 'a' ? <Knot x={1385} y={720} s={0.8} e={e} /> : <Knot x={640} y={340} s={0.5} e={e} />}
 				</Svg>
 			</Layer>
 			<KnotTimer e={e + (variant === 'b' ? 110 : 0)} />
@@ -399,7 +409,7 @@ const S91: React.FC = () => {
 				<Svg>
 					{shadow(tx, 1.4)}
 					<Actor who="tema" x={tx} floor={FL} seat={seat} s={1} facing={1} faceTurn={0.3} look={[0.5, 0.9]} expr="worried" mouth="flat" pose={tp} uid="t91" />
-					<Tag x={tx + hd[0] - 10} y={seat + hd[1] - 130} value={15} f={f} s={1.3} heart auto showBpm bpm={150} />
+					<Tag x={tx + hd[0] - 10} y={seat + hd[1] - 130} value={18} f={f} s={1.3} heart auto showBpm bpm={150} />
 					<Actor who="hero" x={hx} floor={FL} s={HS} facing={-1} faceTurn={0.4} look={[-0.8, 0.2]} expr="angry" pose={hp} bob={bob} uid="h91" />
 					<Pads2 a={pa} b={pb} />
 					<HT x={hx} s={1.05} auto showBpm bpm={150} yy={tagY(HS) - bob} />
