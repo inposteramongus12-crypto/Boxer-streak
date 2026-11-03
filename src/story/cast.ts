@@ -9,6 +9,10 @@ export type CastMember = Base & {sp?: string};
 
 export const CAST: Record<string, CastMember> = {
 	hero: {color: '#f2b21c', hair: 'short', rim: '#fff0cc', rimW: 2.4},
+	trainer: {color: '#3a4256', outfit: 'tee', hair: 'cap', hairColor: '#c9342a', acc: ['mustache'], rim: '#e6ecff', rimW: 2.4, shoe: '#f2f2f2'},
+	tema: {color: '#d94a3a', hair: 'cap', hairColor: '#2f6fd8', rim: '#ffe0c8', rimW: 2.4, shoe: '#f2f2f2'},
+	vovan: {color: '#2f8f5a', outfit: 'tee', hair: 'none', rim: '#e8fff2', rimW: 2.4, shoe: '#111'},
+	kid: {color: '#4aa8d8', hair: 'spiky', hairColor: '#5a3a22', rim: '#e6f6ff', rimW: 2.4, shoe: '#f2f2f2'},
 	friend: {color: '#d94a3a', hair: 'cap', hairColor: '#2f6fd8', rim: '#ffe0c8', rimW: 2.4, shoe: '#f2f2f2'},
 	mom: {color: '#7a5cc4', hair: 'bob', rim: '#ffe6c8', rimW: 2.4, shoe: '#2c2540'},
 	girl: {color: '#8b5cf6', hair: 'ponytail', hairColor: '#ffd34a', acc: ['headphones'], rim: '#efe2ff', rimW: 2.4, shoe: '#efe2ff'},
