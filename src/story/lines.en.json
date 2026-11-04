@@ -1,0 +1,877 @@
+[
+ {
+  "id": "001_N",
+  "sp": "N",
+  "t": "Eleven forty-one at night. You stand at a stranger's door, out of breath."
+ },
+ {
+  "id": "002_N",
+  "sp": "N",
+  "t": "Above you, a twenty-nine is blinking. Not counted yet. Above the one who opened the door, too."
+ },
+ {
+  "id": "003_TEMA",
+  "sp": "TEMA",
+  "t": "What's up? You ran across the whole district."
+ },
+ {
+  "id": "004_N",
+  "sp": "N",
+  "t": "In nineteen minutes both counters turn to zero. To stop that, you need eleven."
+ },
+ {
+  "id": "005_HERO",
+  "sp": "HERO",
+  "t": "Let me in. We have eleven minutes for two."
+ },
+ {
+  "id": "006_N",
+  "sp": "N",
+  "t": "What if a counter of days hung over you, and one missed day burned it?"
+ },
+ {
+  "id": "007_N",
+  "sp": "N",
+  "t": "Let's rewind twenty-nine days."
+ },
+ {
+  "id": "008_N",
+  "sp": "N",
+  "t": "Day one. You stand at a door with a sign that says Boxing, pretending for the third time that you're just passing by."
+ },
+ {
+  "id": "009_N",
+  "sp": "N",
+  "t": "You have exactly one reason: you're tired of flinching when someone raises a hand fast."
+ },
+ {
+  "id": "010_N",
+  "sp": "N",
+  "t": "You walk in. And a one lights up over your head."
+ },
+ {
+  "id": "011_HERO",
+  "sp": "HERO",
+  "t": "What's that?"
+ },
+ {
+  "id": "012_N",
+  "sp": "N",
+  "t": "You look around. Numbers hang over everyone who trains here."
+ },
+ {
+  "id": "013_N",
+  "sp": "N",
+  "t": "The old man with the jump rope: fourteen hundred. The girl at the bag: two hundred twelve."
+ },
+ {
+  "id": "014_N",
+  "sp": "N",
+  "t": "Big Vovan: forty-one. He's proud of it and stands so everyone can see."
+ },
+ {
+  "id": "015_TRAINER",
+  "sp": "TRAINER",
+  "t": "New guy? Wraps first. The hand is made of small bones."
+ },
+ {
+  "id": "016_N",
+  "sp": "N",
+  "t": "Wraps hold the small bones of your hand. So they don't break on your very first bag."
+ },
+ {
+  "id": "017_TRAINER",
+  "sp": "TRAINER",
+  "t": "Group enrollment in thirty-three days. Three are for sickness."
+ },
+ {
+  "id": "018_TRAINER",
+  "sp": "TRAINER",
+  "t": "I take only those with thirty over their heads."
+ },
+ {
+  "id": "019_N",
+  "sp": "N",
+  "t": "Nobody explains the counter rules. Everyone knows only the main one."
+ },
+ {
+  "id": "020_N",
+  "sp": "N",
+  "t": "Miss a day, and at midnight it burns to zero. And everyone sees it."
+ },
+ {
+  "id": "021_N",
+  "sp": "N",
+  "t": "Next to you, a guy in red is tangled in his wraps. He has a one, too."
+ },
+ {
+  "id": "022_TEMA",
+  "sp": "TEMA",
+  "t": "Tyoma. First day, too. Can you help? I got tangled."
+ },
+ {
+  "id": "023_HERO",
+  "sp": "HERO",
+  "t": "Sanya. Hold your finger here."
+ },
+ {
+  "id": "024_TRAINER",
+  "sp": "TRAINER",
+  "t": "Jump rope. Ten minutes. That's boxing, too."
+ },
+ {
+  "id": "025_N",
+  "sp": "N",
+  "t": "At exactly seven thirty p.m., Tyoma grabs his bag and runs. Without saying goodbye."
+ },
+ {
+  "id": "026_N",
+  "sp": "N",
+  "t": "Day three. Everything hurts. Even muscles you didn't know you had."
+ },
+ {
+  "id": "027_N",
+  "sp": "N",
+  "t": "Muscles hurt most one to three days after a workout. You're right at the peak."
+ },
+ {
+  "id": "028_N",
+  "sp": "N",
+  "t": "Evening. No strength for the gym. You decide stretching on a mat counts as training."
+ },
+ {
+  "id": "029_N",
+  "sp": "N",
+  "t": "You google what the counter counts. The internet offers you a pedometer."
+ },
+ {
+  "id": "030_N",
+  "sp": "N",
+  "t": "A small heart appears next to the tag for the first time. Gray. Eighty beats a minute."
+ },
+ {
+  "id": "031_N",
+  "sp": "N",
+  "t": "Eleven forty-five. The tag blinks red."
+ },
+ {
+  "id": "032_HERO",
+  "sp": "HERO",
+  "t": "What?! But I stretched! Twenty minutes!"
+ },
+ {
+  "id": "033_N",
+  "sp": "N",
+  "t": "The counter doesn't need a checkmark. It needs work. The heart has to pound."
+ },
+ {
+  "id": "034_N",
+  "sp": "N",
+  "t": "Kitchen. Jump rope. Three rounds of three minutes, like at the gym. A timer on your phone."
+ },
+ {
+  "id": "035_N",
+  "sp": "N",
+  "t": "The heart turns red: one-twenty, one-forty, one-fifty."
+ },
+ {
+  "id": "036_N",
+  "sp": "N",
+  "t": "Mom appears in the doorway. Looks at you. Looks at the chandelier. Leaves without a word."
+ },
+ {
+  "id": "037_N",
+  "sp": "N",
+  "t": "Eleven fifty-six. Green."
+ },
+ {
+  "id": "038_N",
+  "sp": "N",
+  "t": "Rule one. Effort counts. Not a checkmark, not noise, but how your heart beats."
+ },
+ {
+  "id": "039_N",
+  "sp": "N",
+  "t": "For the next week you and Tyoma test the counter like scientists. Your lab is the yard behind the garages."
+ },
+ {
+  "id": "040_TEMA",
+  "sp": "TEMA",
+  "t": "Experiment one. How much does it take to count?"
+ },
+ {
+  "id": "041_N",
+  "sp": "N",
+  "t": "One round, and at night the tag blinks. Two rounds, it still blinks."
+ },
+ {
+  "id": "042_TEMA",
+  "sp": "TEMA",
+  "t": "Writing it down: fewer than three doesn't count. Moving science forward."
+ },
+ {
+  "id": "043_HERO",
+  "sp": "HERO",
+  "t": "Split the Nobel."
+ },
+ {
+  "id": "044_N",
+  "sp": "N",
+  "t": "Every time, you finish what's missing before midnight. Checking is scary."
+ },
+ {
+  "id": "045_N",
+  "sp": "N",
+  "t": "Three rounds of three minutes with a minute of rest, and it glows green. That's how adult amateurs fight."
+ },
+ {
+  "id": "046_TEMA",
+  "sp": "TEMA",
+  "t": "Experiment two. No bag, no pads."
+ },
+ {
+  "id": "047_N",
+  "sp": "N",
+  "t": "Shadowboxing in the yard. Heart one-fifty. Counted. The place doesn't matter."
+ },
+ {
+  "id": "048_N",
+  "sp": "N",
+  "t": "Experiment three happens by accident. In the middle of round two, Tyoma's mom calls."
+ },
+ {
+  "id": "049_TEMA",
+  "sp": "TEMA",
+  "t": "Yes, Mom. Yes. He ate."
+ },
+ {
+  "id": "050_N",
+  "sp": "N",
+  "t": "Thirty seconds of talking. The heart fades. And that round burns."
+ },
+ {
+  "id": "051_N",
+  "sp": "N",
+  "t": "You stopped, so start the round over. The counter sees every pause."
+ },
+ {
+  "id": "052_N",
+  "sp": "N",
+  "t": "Experiment four is Tyoma's idea."
+ },
+ {
+  "id": "053_TEMA",
+  "sp": "TEMA",
+  "t": "Let's just run. Running is easier."
+ },
+ {
+  "id": "054_N",
+  "sp": "N",
+  "t": "Ten minutes of steady running. The heart is yellow, one twenty-five. Not counted. The pulse doesn't reach."
+ },
+ {
+  "id": "055_TEMA",
+  "sp": "TEMA",
+  "t": "So running is useless?"
+ },
+ {
+  "id": "056_HERO",
+  "sp": "HERO",
+  "t": "For the counter, yes. For your legs, no."
+ },
+ {
+  "id": "057_N",
+  "sp": "N",
+  "t": "Rule two. Three rounds. No stopping. The place doesn't matter. Steady running doesn't count."
+ },
+ {
+  "id": "058_N",
+  "sp": "N",
+  "t": "And again seven thirty, and Tyoma runs off. Every day, at the same time."
+ },
+ {
+  "id": "059_N",
+  "sp": "N",
+  "t": "Where do you think he goes? We'll come back to it."
+ },
+ {
+  "id": "060_TRAINER",
+  "sp": "TRAINER",
+  "t": "Elbow! Chin! Breathe!"
+ },
+ {
+  "id": "061_N",
+  "sp": "N",
+  "t": "Your arms are the same as a week ago. But the punches are faster and more accurate."
+ },
+ {
+  "id": "062_N",
+  "sp": "N",
+  "t": "In the first weeks, strength grows mostly because the brain learns to switch the muscles on. The muscles catch up later."
+ },
+ {
+  "id": "063_N",
+  "sp": "N",
+  "t": "Day twelve. Smack, and the coach nods for the first time."
+ },
+ {
+  "id": "064_N",
+  "sp": "N",
+  "t": "Day fifteen. In the morning the thermometer shows thirty-eight point two."
+ },
+ {
+  "id": "065_N",
+  "sp": "N",
+  "t": "You drag yourself to the gym anyway. In a scarf, with a red nose and a blinking fifteen over your head."
+ },
+ {
+  "id": "066_TRAINER",
+  "sp": "TRAINER",
+  "t": "With a fever, go home. Right now."
+ },
+ {
+  "id": "067_HERO",
+  "sp": "HERO",
+  "t": "But the counter?! It'll burn!"
+ },
+ {
+  "id": "068_TRAINER",
+  "sp": "TRAINER",
+  "t": "If it burns, you start over. You've got one head."
+ },
+ {
+  "id": "069_N",
+  "sp": "N",
+  "t": "Midnight. The counter doesn't burn. It turns gray. A small word on top: pause."
+ },
+ {
+  "id": "070_N",
+  "sp": "N",
+  "t": "Three days of gray pause. Tyoma's too: you caught a cold together, in the yard. You recover, and it's fifteen again."
+ },
+ {
+  "id": "071_N",
+  "sp": "N",
+  "t": "For all three days you check the gray tag every half hour. Like a thermometer."
+ },
+ {
+  "id": "072_N",
+  "sp": "N",
+  "t": "And Vovan decided he'd found a loophole."
+ },
+ {
+  "id": "073_N",
+  "sp": "N",
+  "t": "He texts the coach: sick. And goes to the movies."
+ },
+ {
+  "id": "074_N",
+  "sp": "N",
+  "t": "Midnight. His forty-one doesn't turn gray. It burns. To zero."
+ },
+ {
+  "id": "075_N",
+  "sp": "N",
+  "t": "By morning the photo of his zero is already in the gym's group chat."
+ },
+ {
+  "id": "076_N",
+  "sp": "N",
+  "t": "Rule three. Illness freezes the counter. Lying burns it. And the counter knows the difference."
+ },
+ {
+  "id": "077_N",
+  "sp": "N",
+  "t": "Day eighteen. Seven thirty. Tyoma runs off again. This time you follow."
+ },
+ {
+  "id": "078_N",
+  "sp": "N",
+  "t": "Tyoma isn't going for a walk. He's running home. At the entrance his mom waits in scrubs."
+ },
+ {
+  "id": "079_N",
+  "sp": "N",
+  "t": "She's leaving for a night shift at the hospital. And Tyoma stays with his little brother. Until morning."
+ },
+ {
+  "id": "080_TEMA",
+  "sp": "TEMA",
+  "t": "What are you doing here? Were you following me?"
+ },
+ {
+  "id": "081_HERO",
+  "sp": "HERO",
+  "t": "Why didn't you say?"
+ },
+ {
+  "id": "082_TEMA",
+  "sp": "TEMA",
+  "t": "What's there to say? It's not laziness. It just happened."
+ },
+ {
+  "id": "083_HERO",
+  "sp": "HERO",
+  "t": "I thought you were just slacking."
+ },
+ {
+  "id": "084_TEMA",
+  "sp": "TEMA",
+  "t": "Everyone thinks so. Let them."
+ },
+ {
+  "id": "085_N",
+  "sp": "N",
+  "t": "Mom is alone. Hospital at night, sleeping in the day. Around eight the door closes behind Tyoma until morning."
+ },
+ {
+  "id": "086_TEMA",
+  "sp": "TEMA",
+  "t": "Gym until nine. And I have to run at seven thirty."
+ },
+ {
+  "id": "087_HERO",
+  "sp": "HERO",
+  "t": "Then let's do it here. Under the window. I'll hold the pads."
+ },
+ {
+  "id": "088_N",
+  "sp": "N",
+  "t": "Three rounds under the window. The brother watches from above and counts the punches out loud."
+ },
+ {
+  "id": "089_N",
+  "sp": "N",
+  "t": "At twenty-nine the brother loses count and starts over. Nobody minds."
+ },
+ {
+  "id": "090_N",
+  "sp": "N",
+  "t": "In the middle of round two Tyoma's shoelace comes undone. The knot pulls tight. Tyoma fights with it for almost a minute."
+ },
+ {
+  "id": "091_N",
+  "sp": "N",
+  "t": "And all that time you keep moving with the pads, not standing for a second. And somehow Tyoma's heart doesn't fade."
+ },
+ {
+  "id": "092_N",
+  "sp": "N",
+  "t": "Midnight. You're home, looking at your tag. Green. Though today you never threw a punch yourself."
+ },
+ {
+  "id": "093_N",
+  "sp": "N",
+  "t": "Strange. They counted both. Even Tyoma with the shoelace."
+ },
+ {
+  "id": "094_N",
+  "sp": "N",
+  "t": "Day twenty-two. Two tests in a row. You come home and sit down for a minute."
+ },
+ {
+  "id": "095_N",
+  "sp": "N",
+  "t": "You open your eyes. Eleven forty-one."
+ },
+ {
+  "id": "096_HERO",
+  "sp": "HERO",
+  "t": "No, no, no, no!"
+ },
+ {
+  "id": "097_N",
+  "sp": "N",
+  "t": "The apartment sleeps. You dash onto the stairs. Three rounds of shadowboxing between floors."
+ },
+ {
+  "id": "098_N",
+  "sp": "N",
+  "t": "You count the seconds in a whisper, so you don't wake the neighbors. The heart pounds louder than you."
+ },
+ {
+  "id": "099_N",
+  "sp": "N",
+  "t": "Eleven fifty-three. Done. Green."
+ },
+ {
+  "id": "100_N",
+  "sp": "N",
+  "t": "The next day you tell it at the gym. The old man with the jump rope silently draws in the air with a finger: zero zero, zero two."
+ },
+ {
+  "id": "101_N",
+  "sp": "N",
+  "t": "Once he finished two minutes after midnight. And everything burned. Since then, fourteen hundred."
+ },
+ {
+  "id": "102_N",
+  "sp": "N",
+  "t": "Rule four. Don't start before midnight. Finish."
+ },
+ {
+  "id": "103_N",
+  "sp": "N",
+  "t": "Day twenty-nine. Tomorrow is thirty, and with it the tournament group. Today is your sister's concert."
+ },
+ {
+  "id": "104_N",
+  "sp": "N",
+  "t": "Mom's on shift. There's no dad. You're the one going to the concert. You promised a month ago."
+ },
+ {
+  "id": "105_N",
+  "sp": "N",
+  "t": "Your sister sings off key and loud. You clap louder than anyone."
+ },
+ {
+  "id": "106_N",
+  "sp": "N",
+  "t": "The concert runs seven to nine. The gym closes at nine. You choose the concert."
+ },
+ {
+  "id": "107_N",
+  "sp": "N",
+  "t": "Then you sit with your sister until Mom is back. Like Tyoma. Only for you it's one evening."
+ },
+ {
+  "id": "108_N",
+  "sp": "N",
+  "t": "Eleven o'clock. Mom's home. You wrap your hands. Eleven minutes, and the counter is saved."
+ },
+ {
+  "id": "109_N",
+  "sp": "N",
+  "t": "Eleven oh two. You call Tyoma to do the rounds at the same time, like last week."
+ },
+ {
+  "id": "110_TEMA",
+  "sp": "TEMA",
+  "t": "My brother has thirty-eight and a half."
+ },
+ {
+  "id": "111_TEMA",
+  "sp": "TEMA",
+  "t": "Mom said: a cool towel every two minutes."
+ },
+ {
+  "id": "112_TEMA",
+  "sp": "TEMA",
+  "t": "I started twice. Every two minutes, stop."
+ },
+ {
+  "id": "113_TEMA",
+  "sp": "TEMA",
+  "t": "That's it, Sanya. I'm out."
+ },
+ {
+  "id": "114_N",
+  "sp": "N",
+  "t": "Illness freezes the counter. But it's the brother who's sick, not Tyoma. His twenty-eight days will burn."
+ },
+ {
+  "id": "115_N",
+  "sp": "N",
+  "t": "Eleven oh five. Two paths."
+ },
+ {
+  "id": "116_N",
+  "sp": "N",
+  "t": "First: your own rounds at home, until eleven sixteen. Your counter is saved."
+ },
+ {
+  "id": "117_N",
+  "sp": "N",
+  "t": "Then a run to Tyoma. Thirty-six minutes. You're at his door at eleven fifty-two."
+ },
+ {
+  "id": "118_N",
+  "sp": "N",
+  "t": "Tyoma starts at fifty-five and finishes at six past midnight. After midnight. Zero."
+ },
+ {
+  "id": "119_N",
+  "sp": "N",
+  "t": "Second path: run right now. But your own rounds aren't done yet."
+ },
+ {
+  "id": "120_HERO",
+  "sp": "HERO",
+  "t": "Finish at home, and that's it?"
+ },
+ {
+  "id": "121_N",
+  "sp": "N",
+  "t": "You tear off the wraps. And run out."
+ },
+ {
+  "id": "122_N",
+  "sp": "N",
+  "t": "The buses don't run anymore. Five kilometers of steady running. You can't go faster."
+ },
+ {
+  "id": "123_N",
+  "sp": "N",
+  "t": "Eleven twenty-three. Halfway. Your legs are like cotton, but you keep a steady pace."
+ },
+ {
+  "id": "124_N",
+  "sp": "N",
+  "t": "Heart: one-thirty. Yellow. Running doesn't count, you tested it yourself in the yard."
+ },
+ {
+  "id": "125_N",
+  "sp": "N",
+  "t": "Eleven thirty. How do you fit two elevens into eleven minutes?"
+ },
+ {
+  "id": "126_HERO",
+  "sp": "HERO",
+  "t": "The shoelace!"
+ },
+ {
+  "id": "127_N",
+  "sp": "N",
+  "t": "Eleven forty-one. A stranger's door. You can't catch your breath. Now you know why you ran."
+ },
+ {
+  "id": "128_HERO",
+  "sp": "HERO",
+  "t": "Let me in. We'll do them together."
+ },
+ {
+  "id": "129_TEMA",
+  "sp": "TEMA",
+  "t": "You could've done it all at home."
+ },
+ {
+  "id": "130_HERO",
+  "sp": "HERO",
+  "t": "I could. Let me in, it's time."
+ },
+ {
+  "id": "131_N",
+  "sp": "N",
+  "t": "Eleven forty-four. A basin by the bed. A stack of towels. Pads wrapped so they don't slap. The brother sleeps two steps away."
+ },
+ {
+  "id": "132_N",
+  "sp": "N",
+  "t": "One rule against you: stop, and the round burns. But in a pair, the round goes on while at least one of you works."
+ },
+ {
+  "id": "133_HERO",
+  "sp": "HERO",
+  "t": "Tap, don't hit. Quietly. When I change the towel, you don't stop."
+ },
+ {
+  "id": "134_TEMA",
+  "sp": "TEMA",
+  "t": "And when I change it?"
+ },
+ {
+  "id": "135_HERO",
+  "sp": "HERO",
+  "t": "Then I work. Let's go."
+ },
+ {
+  "id": "136_N",
+  "sp": "N",
+  "t": "Round one. Light taps, almost no sound. But footwork, slips, tempo. Both hearts turn red."
+ },
+ {
+  "id": "137_N",
+  "sp": "N",
+  "t": "Eleven forty-six. You step to the bed. Fifteen seconds. Tyoma punches the air and doesn't stop."
+ },
+ {
+  "id": "138_N",
+  "sp": "N",
+  "t": "Eleven forty-seven. Rest. At eleven forty-seven thirty, a fresh towel while you rest."
+ },
+ {
+  "id": "139_N",
+  "sp": "N",
+  "t": "Round two. Eleven fifty. Tyoma goes to his brother. And you work with empty pads: duck, step, duck."
+ },
+ {
+  "id": "140_N",
+  "sp": "N",
+  "t": "Eleven fifty-one. Rest. At fifty-one thirty, a towel again. Round three. The last one."
+ },
+ {
+  "id": "141_N",
+  "sp": "N",
+  "t": "Eleven fifty-four. You're at the bed again. The brother opens his eyes and looks at you."
+ },
+ {
+  "id": "142_N",
+  "sp": "N",
+  "t": "Eleven fifty-five. The timer hits zero. You slide down the wall."
+ },
+ {
+  "id": "143_N",
+  "sp": "N",
+  "t": "The brother stands in the doorway. With a towel on his forehead."
+ },
+ {
+  "id": "144_TEMA",
+  "sp": "TEMA",
+  "t": "When you get better. I promise."
+ },
+ {
+  "id": "145_N",
+  "sp": "N",
+  "t": "Midnight. The twenty-nine over both of you stops blinking."
+ },
+ {
+  "id": "146_N",
+  "sp": "N",
+  "t": "The next day, thirty. The coach writes two names on the board."
+ },
+ {
+  "id": "147_TRAINER",
+  "sp": "TRAINER",
+  "t": "Both. Into the group."
+ },
+ {
+  "id": "148_N",
+  "sp": "N",
+  "t": "Day forty-one. You're wiped out. Nine p.m., you sit on the bed, and that's it."
+ },
+ {
+  "id": "149_N",
+  "sp": "N",
+  "t": "Midnight. Forty days in a row turn into zero."
+ },
+ {
+  "id": "150_N",
+  "sp": "N",
+  "t": "By morning the photo of your zero is already in the group chat. You lie there staring at the ceiling."
+ },
+ {
+  "id": "151_N",
+  "sp": "N",
+  "t": "On the fridge hangs your sister's card: \"Forty days for Sanya!\" She drew it yesterday."
+ },
+ {
+  "id": "152_N",
+  "sp": "N",
+  "t": "Forty days. To zero. Why even get up?"
+ },
+ {
+  "id": "153_HERO",
+  "sp": "HERO",
+  "t": "Forty days. And that's all."
+ },
+ {
+  "id": "154_N",
+  "sp": "N",
+  "t": "Your legs carry you to the gym. By themselves. You don't remember lacing up."
+ },
+ {
+  "id": "155_N",
+  "sp": "N",
+  "t": "At the gym, Vovan. The one whose forty-one burned at the movies."
+ },
+ {
+  "id": "156_N",
+  "sp": "N",
+  "t": "Above him, twenty-nine. He wraps his hands without looking. Like brushing teeth."
+ },
+ {
+  "id": "157_HERO",
+  "sp": "HERO",
+  "t": "You burned. Why did you come?"
+ },
+ {
+  "id": "158_N",
+  "sp": "N",
+  "t": "Vovan shrugs and points at his sneakers. As if to say, they did it themselves."
+ },
+ {
+  "id": "159_N",
+  "sp": "N",
+  "t": "He didn't start over out of grief. He just kept coming."
+ },
+ {
+  "id": "160_TRAINER",
+  "sp": "TRAINER",
+  "t": "Scientists looked for the moment when you do it on autopilot."
+ },
+ {
+  "id": "161_TRAINER",
+  "sp": "TRAINER",
+  "t": "For a typical person, sixty-six. One missed day changed almost nothing."
+ },
+ {
+  "id": "162_N",
+  "sp": "N",
+  "t": "That's a study from University College London. The spread is from eighteen to two hundred fifty-four days."
+ },
+ {
+  "id": "163_N",
+  "sp": "N",
+  "t": "A habit didn't form in people who missed often. And one missed day barely touched it."
+ },
+ {
+  "id": "164_N",
+  "sp": "N",
+  "t": "And this is about habit. Showing up without talking yourself into it. How you punch is a different score."
+ },
+ {
+  "id": "165_N",
+  "sp": "N",
+  "t": "The tag over you blinks. And changes. Now it shows not days in a row, but habit."
+ },
+ {
+  "id": "166_N",
+  "sp": "N",
+  "t": "Zero was never the end. The counter was just counting the wrong thing."
+ },
+ {
+  "id": "167_N",
+  "sp": "N",
+  "t": "Day sixty-six. Your bar is almost full. Tyoma's is shorter. Everyone has their own time."
+ },
+ {
+  "id": "168_TEMA",
+  "sp": "TEMA",
+  "t": "Looks like mine is all two hundred fifty-four."
+ },
+ {
+  "id": "169_HERO",
+  "sp": "HERO",
+  "t": "Then I'll come with you for all two hundred fifty-four."
+ },
+ {
+  "id": "170_N",
+  "sp": "N",
+  "t": "The coach no longer looks at the tags. He looks at where your elbows are."
+ },
+ {
+  "id": "171_TRAINER",
+  "sp": "TRAINER",
+  "t": "Elbow!"
+ },
+ {
+  "id": "172_N",
+  "sp": "N",
+  "t": "Evening. Tyoma's mom is on shift again. In the yard under the window, three shadows."
+ },
+ {
+  "id": "173_N",
+  "sp": "N",
+  "t": "Over the smallest one, a one lights up."
+ },
+ {
+  "id": "174_N",
+  "sp": "N",
+  "t": "And you? What did you quit after your first miss? Be honest."
+ },
+ {
+  "id": "175_N",
+  "sp": "N",
+  "t": "In a month, a tournament. And that same evening, Tyoma's mom has a night shift again."
+ }
+]
