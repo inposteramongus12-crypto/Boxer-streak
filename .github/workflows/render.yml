@@ -118,7 +118,7 @@ jobs:
   join:
     needs: [plan, render]
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     permissions:
       contents: read
       actions: write # чтобы удалить куски после склейки
