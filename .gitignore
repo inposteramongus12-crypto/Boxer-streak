@@ -6,3 +6,6 @@ out/
 *.pem
 *secret*
 *token*
+
+# собирается make-sound (около 99 МБ), в репозиторий не кладём
+public/sfx/bed.wav

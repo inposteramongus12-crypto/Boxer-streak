@@ -43,6 +43,6 @@ if (process.argv.includes('--github-output') && process.env.GITHUB_OUTPUT) {
 const wt = arg('--write-timeline');
 if (wt) {
 	const lines = TL.lines.filter((l) => l.from >= start && l.from <= end).map((l) => ({...l, from: l.from - start}));
-	fs.writeFileSync(wt, JSON.stringify({...TL, total: end - start + 1, lines}));
+	fs.writeFileSync(wt, JSON.stringify({...TL, total: end - start + 1, lines, start}));
 	console.log(`timeline for the range: ${lines.length} lines -> ${wt}`);
 }

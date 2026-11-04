@@ -52,7 +52,7 @@ const S148: React.FC = () => {
 					<Blanket f={gf} night />
 					<Actor who="hero" x={1290} floor={FL} seat={690} s={HS} facing={-1} faceTurn={0.3} look={[-0.4, 0.5]} expr={slump > 0.5 ? 'sleepy' : 'normal'} lidL={slump} lidR={slump} pose={p} uid="h148" />
 					<HT x={1300} s={1.3} yy={690 - 164 * HS - 120} bpm={74} />
-					<Onoma x={1160} y={380} text="ЗЗЗ" t={(e - 90) % 40} c="#c8d0ea" rot={-8} size={64} />
+					<Onoma x={1160} y={380} text="Zzz" t={(e - 90) % 40} c="#c8d0ea" rot={-8} size={64} />
 					<Onoma x={1480} y={560} text="ЩЁЛК" t={e - 130} c="#ffd34a" rot={-6} size={56} />
 				</Svg>
 			</Layer>
@@ -384,8 +384,8 @@ const S162: React.FC = () => {
 				<text x={px(18)} y={910} textAnchor="middle" fontSize={64} fontFamily={FONT} fontWeight={900} fill="#ffd34a">18</text>
 				<text x={px(254)} y={910} textAnchor="middle" fontSize={64} fontFamily={FONT} fontWeight={900} fill="#ffd34a">254</text>
 			</g>
-			<text x={200} y={1030} fontSize={34} fontFamily={FONT} fontWeight={600} fill="#8f98bd">схема: каждая точка — один участник</text>
-			<Cite k={grow(e, 100, 12)} />
+			<text x={200} y={1030} fontSize={40} fontFamily={FONT} fontWeight={600} fill="#b8c0e0">схема: каждая точка — один участник</text>
+			<Cite k={1} />
 		</Board>
 	);
 };
@@ -415,7 +415,8 @@ const S163: React.FC = () => {
 			</g>
 			<text x={X1} y={Y0 - 0.9 * 560 - 30} textAnchor="end" fontSize={60} fontFamily={FONT} fontWeight={900} fill="#5fe08a">РЕДКИЕ ПРОПУСКИ</text>
 			<text x={X1} y={Y0 + 110} textAnchor="end" fontSize={64} fontFamily={FONT} fontWeight={900} fill="#ff6a5a">ЧАСТЫЕ ПРОПУСКИ</text>
-			<Cite k={0.9} />
+			<text x={200} y={1030} fontSize={40} fontFamily={FONT} fontWeight={600} fill="#b8c0e0">схема: линии показывают идею, не измерения</text>
+			<Cite k={1} />
 		</Board>
 	);
 };
@@ -490,9 +491,9 @@ const S167: React.FC = () => {
 		<Board tint="#13301f">
 			<g transform={`translate(960,540) scale(${z}) translate(-960,-540)`}>
 				<text x={960} y={140} textAnchor="middle" fontSize={110} fontFamily={FONT} fontWeight={900} fill="#fff">ДЕНЬ 66</text>
-				<HabitTag x={500} y={330} s={1.9} cap={66} value="66" fill={0.94 * grow(e, 14, 50)} />
+				<HabitTag x={500} y={330} s={1.9} cur={64} cap={66} />
 				<text x={500} y={470} textAnchor="middle" fontSize={76} fontFamily={FONT} fontWeight={900} fill="#ffd34a">САНЯ</text>
-				<HabitTag x={1420} y={330} s={1.9} cap={254} value={e > 64 ? '254' : '?'} fill={0.33 * grow(e, 30, 50)} />
+				<HabitTag x={1420} y={330} s={1.9} cur={84} cap={254} />
 				<text x={1420} y={470} textAnchor="middle" fontSize={76} fontFamily={FONT} fontWeight={900} fill="#ff8a7a">ТЁМА</text>
 				<Actor who="hero" x={500} floor={1070} s={1.5} facing={1} faceTurn={0.4} look={[0.5, -0.2]} expr="normal" mouth="smile" pose={idle(gf, 1)} uid="h167" />
 				<Actor who="tema" x={1420} floor={1070} s={1.5} facing={-1} faceTurn={0.4} look={[-0.5, -0.2]} expr="normal" mouth="smile" pose={idle(gf, 4)} uid="t167" />
@@ -521,7 +522,7 @@ const S168: React.FC = () => {
 			<Layer depth={1}>
 				<Svg>
 					<Actor who="hero" x={640} floor={FL} s={HS} facing={1} faceTurn={0.5} look={[0.8, 0]} expr="normal" mouth="smile" pose={hp} uid="h168" />
-					<HabitTag x={640} y={tagY(HS) - 150} s={1.2} cur={60} cap={66} />
+					<HabitTag x={640} y={tagY(HS) - 150} s={1.2} cur={64} cap={66} />
 					<Actor who="tema" x={840} floor={FL} s={1} facing={-1} faceTurn={0.5} look={[-0.7, 0.4]} expr="normal" mouth="smile" squash={0.02 * laugh} pose={tp} uid="t168" />
 					<HabitTag x={900} y={tagY(1) - 30} s={1.2} cur={84} cap={254} />
 					<rect x={840 - 70} y={hip(1) - 90} width={44} height={30} rx={10} fill="#f2efe6" stroke="#10132a" strokeWidth={3} />
@@ -592,7 +593,7 @@ const S172: React.FC = () => {
 			<Layer depth={1}>
 				<Svg>
 					<Actor who="hero" x={700} floor={FL} s={HS} facing={1} faceTurn={0.4} look={[0.8, 0]} expr="normal" mouth="smile" pose={mk(1, 700, HS, 1)} uid="h172" />
-					<HabitTag x={700} y={tagY(HS) - 150} s={1.0} cur={63} cap={66} />
+					<HabitTag x={700} y={tagY(HS) - 150} s={1.0} cur={64} cap={66} />
 					<Actor who="tema" x={1060} floor={FL} s={1} facing={-1} faceTurn={0.4} look={[-0.8, 0]} expr="normal" mouth="smile" pose={mk(4, 1060, 1, -1)} uid="t172" />
 					<HabitTag x={1060} y={tagY(1) - 40} s={1.0} cur={84} cap={254} />
 					<Actor who="bro" x={1330} floor={FL} s={0.6} facing={-1} faceTurn={0.4} look={[-0.8, 0]} expr="normal" mouth="smile" pose={mk(7, 1330, 0.6, -1)} uid="b172" />
@@ -625,7 +626,7 @@ const S173: React.FC = () => {
 					{on > 0.02 ? <Tag x={1250} y={hip(0.6) - 164 * 0.6 - 130 - jump} value={1} f={f} s={1.5 * on} heart={false} pop={1 + 0.3 * Math.exp(-Math.max(0, e - 22) / 5)} /> : null}
 					{e > 20 && e < 42 ? <circle cx={1250} cy={hip(0.6) - 164 * 0.6 - 130 - jump} r={60 + (e - 20) * 8} fill="none" stroke="#ffe08a" strokeWidth={8 * ring} opacity={ring} /> : null}
 					{e > 20 && e < 46 ? Array.from({length: 12}).map((_, i) => <circle key={i} cx={1250 + Math.cos(i * 0.52) * (e - 20) * 7} cy={hip(0.6) - 164 * 0.6 - 130 + Math.sin(i * 0.52) * (e - 20) * 5} r={6} fill="#ffe08a" />) : null}
-					<Onoma x={1130} y={hip(0.6) - 230} text="ЩЁЛК" t={e - 20} c="#ffd34a" rot={-8} size={56} />
+					<Onoma x={1010} y={hip(0.6) - 330} text="ЩЁЛК" t={e - 20} c="#ffd34a" rot={-8} size={56} />
 				</Svg>
 			</Layer>
 		</Stage>
