@@ -7,15 +7,20 @@ import type {ShotDef} from '../kit/coverage';
 import {Extra, Layer, Stage, Svg, camOn, clamp, ease, usePush} from '../kit/kit';
 import {Board, FONT} from '../kit/ui';
 import {Onoma} from '../reference/PauseTime';
-import {BoxStreet, Clock, ConcertHall, Couch, Gym, Room, Stairwell, Tag} from './places';
+import {BoxStreet, Clock, ConcertHall, Couch, Gym, HideHud, Room, Stairwell, Tag} from './places';
+import {useContext} from 'react';
 import {FL, HS, HT, grow, guard, hip, hit, tagY} from './common';
 import {Chalk, FS, hand, pill, shadow} from './shots2';
 
 /* Часть 7 (094–102) и начало части 8 (103–108). Часы 23:41 — те же красные светодиоды, что в хуке.
    Табличка героя: день 25 → «22», день 32 → «29» (мигает вечером, как в хуке). */
-export const Led: React.FC<{text: string; size?: number; left?: number; top?: number; right?: number}> = ({text, size = 80, left = 48, top = 40, right}) => (
+export const Led: React.FC<{text: string; size?: number; left?: number; top?: number; right?: number}> = ({text, size = 80, left = 48, top = 40, right}) => {
+	const hidden = useContext(HideHud);
+	if (hidden) return null;
+	return (
 	<div style={{position: 'absolute', left: right === undefined ? left : undefined, right, top, background: '#10141f', border: '5px solid #2c3646', borderRadius: 16, padding: '2px 24px', color: '#ff4a3a', fontFamily: FONT, fontWeight: 800, fontSize: size, textShadow: '0 0 12px #ff4a3a', lineHeight: 1.25}}>{text}</div>
-);
+	);
+};
 const hm = (m: number) => `${String(Math.floor(m / 60) % 24).padStart(2, '0')}:${String(Math.floor(m) % 60).padStart(2, '0')}`;
 const rotPt = (cx: number, cy: number, dx: number, dy: number, deg: number): [number, number] => {
 	const r = (deg * Math.PI) / 180;

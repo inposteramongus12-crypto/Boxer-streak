@@ -9,6 +9,7 @@ import {ShotHost, VoiceTrack, whipAt} from './Long';
 import {SHORT, Seg} from './story/short';
 import {STORY} from './story/config';
 import {TopClock} from './story/shortV';
+import {HideHud} from './story/places';
 
 /* 9:16 version. Two modes (src/story/short.ts):
    crop  — shorts-only video: the same shots and voice as Long, each shot cropped to 9:16
@@ -93,7 +94,7 @@ const speakerAt = (f: number) => {
 };
 const SegTop: React.FC<{seg: (typeof TIMED)[number]}> = ({seg}) => {
 	const f = useCurrentFrame();
-	return seg.top ? <TopClock mode={seg.top} f={f} ep0={seg.ep0} /> : null;
+	return seg.top ? <TopClock mode={seg.top} f={f} ep0={seg.ep0} label={seg.label} /> : null;
 };
 const RecutSeg: React.FC<{seg: (typeof TIMED)[number]}> = ({seg}) => {
 	const f = useCurrentFrame();
@@ -108,6 +109,7 @@ const RecutSeg: React.FC<{seg: (typeof TIMED)[number]}> = ({seg}) => {
 	const C = shot.C;
 	return (
 		<CropBox c={c}>
+			<HideHud.Provider value={true}>
 			<TalkOverride.Provider value={(sp, g) => talkAt(sp, g - seg.ep0 + seg.start)}>
 				<SpeakOverride.Provider value={(g) => speakerAt(g - seg.ep0 + seg.start)}>
 					<ShotCtx.Provider value={ctx}>
@@ -117,6 +119,7 @@ const RecutSeg: React.FC<{seg: (typeof TIMED)[number]}> = ({seg}) => {
 					</ShotCtx.Provider>
 				</SpeakOverride.Provider>
 			</TalkOverride.Provider>
+			</HideHud.Provider>
 		</CropBox>
 	);
 };
@@ -149,7 +152,7 @@ export const Short: React.FC<{sound?: boolean}> = ({sound = true}) => {
 							</Sequence>
 						))}
 			</AbsoluteFill>
-			{SHORT.hook && lines[1] ? <Caption f={f} from={0} to={lines[1].from - 4} top={30} lines={SHORT.hook} size={78} /> : null}
+			{SHORT.hook && lines[1] ? <Caption f={f} from={0} to={lines[1].from - 4} top={215} lines={SHORT.hook} size={78} /> : null}
 			{STORY.endCaption && last ? <Caption f={f} from={last.from + last.dur + 8} to={SHORT_FRAMES} top={1450} lines={STORY.endCaption} size={72} /> : null}
 			{sound ? (
 				<>

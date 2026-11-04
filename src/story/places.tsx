@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {createContext, useContext} from 'react';
 import {interpolateColors} from 'remotion';
 import {Svg} from '../engine/camera';
 import {AgeBadge, FONT} from '../kit/ui';
@@ -145,8 +145,12 @@ export const Stairwell: React.FC<{f: number; open?: number}> = ({f, open = 0}) =
 	);
 };
 
+/* в шортсе экранные часы/шкала рисуются сверху отдельно: сцены лонга их прячут */
+export const HideHud = createContext(false);
 /* ---------- Цифровые часы на стене (красные светодиоды) ---------- */
 export const Clock: React.FC<{x: number; y: number; text: string; s?: number; blink?: boolean; f?: number}> = ({x, y, text, s = 1, blink = false, f = 0}) => {
+	const hidden = useContext(HideHud);
+	if (hidden) return null;
 	const colon = !blink || Math.floor(f / 15) % 2 === 0;
 	return (
 		<g transform={`translate(${x},${y}) scale(${s})`}>

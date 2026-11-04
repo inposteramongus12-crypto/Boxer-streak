@@ -7,7 +7,8 @@ import type {ShotDef} from '../kit/coverage';
 import {Layer, Stage, Svg, camOn, clamp, ease, usePush} from '../kit/kit';
 import {Bubble, Board, FONT} from '../kit/ui';
 import {Onoma} from '../reference/PauseTime';
-import {Clock, Flat, Gym, Stairwell, Tag} from './places';
+import {Clock, Flat, Gym, HideHud, Stairwell, Tag} from './places';
+import {useContext} from 'react';
 import {FL, HS, HT, grow, guard, hands, hip, hit, tagY} from './common';
 import {Chalk, FS, hand, pill, shadow} from './shots2';
 import {Led} from './shots5';
@@ -27,6 +28,7 @@ const SEGS: [number, number, string, string][] = [[0, 3, '#e2483a', 'РАУНД 
 const SWAPS = [2, 3.5, 6, 7.5, 10];
 export const roundNow = (m: number) => {
 	const t = m - 1424;
+	if (t >= 10.99 && t < 11.4) return 'РАУНД 3 · 0:00';
 	const s = SEGS.find(([a, b]) => t >= a && t < b);
 	if (!s) return null;
 	const left = (s[1] - t) * 60;
@@ -34,6 +36,8 @@ export const roundNow = (m: number) => {
 };
 /* экранная шкала 23:44 → 23:55: сегменты раундов, отметки смен полотенца, бегунок */
 const Hud: React.FC<{gf: number; bar?: boolean; big?: boolean}> = ({gf, bar = true, big}) => {
+	const hidden = useContext(HideHud);
+	if (hidden) return null;
 	const m = mins(gf);
 	const swapNow = SWAPS.some((s) => Math.abs(m - (1424 + s)) < 0.12);
 	const X0 = 700;
@@ -438,7 +442,7 @@ const S142: React.FC = () => {
 					<Actor who="hero" x={1060} floor={FL} seat={seat} s={HS} facing={-1} faceTurn={0.4} look={[-0.6, 0.2]} expr="sleepy" mouth="open" pose={ph} uid="h142" />
 					{heroTag(1070, 1.3, 150, seat - 164 * HS - 215)}
 					{temaTag(f, 840, 1.3, 150, seatT - 164 - 125)}
-					<g transform="translate(960,500)">
+					<g transform="translate(960,330)">
 						<rect x={-150} y={-70} width={300} height={130} rx={20} fill="#10141f" stroke="#7fe0ff" strokeWidth={6} />
 						<text y={34} textAnchor="middle" fontSize={100} fontFamily={FONT} fontWeight={900} fill="#7fe0ff">0:00</text>
 					</g>
