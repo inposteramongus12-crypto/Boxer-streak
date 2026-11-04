@@ -9,3 +9,4 @@ out/
 
 # собирается make-sound (около 99 МБ), в репозиторий не кладём
 public/sfx/bed.wav
+public/sfx/bed_short.wav

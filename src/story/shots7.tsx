@@ -16,8 +16,8 @@ import {Led} from './shots5';
    Время сцены: 23:41 → 23:44 (подготовка) → 23:44–23:55 (11 минут: 3+1+3+1+3) → 00:00. */
 // кадр → минуты суток
 const KEYS: [number, number][] = [[16445, 1421], [16833, 1424], [17524, 1424], [17743, 1426], [17988, 1427], [18088, 1427.5], [18210, 1428], [18400, 1430], [18464, 1431], [18560, 1431.5], [18690, 1432], [18713, 1434], [18903, 1435], [19201, 1440]];
-const mins = (gf: number) => interpolate(gf, KEYS.map((k) => k[0]), KEYS.map((k) => k[1]), clamp);
-const hms = (m: number, sec = false) => {
+export const mins = (gf: number) => interpolate(gf, KEYS.map((k) => k[0]), KEYS.map((k) => k[1]), clamp);
+export const hms = (m: number, sec = false) => {
 	const h = Math.floor(m / 60) % 24;
 	const mm = Math.floor(m) % 60;
 	const ss = Math.round((m % 1) * 60);
@@ -25,7 +25,7 @@ const hms = (m: number, sec = false) => {
 };
 const SEGS: [number, number, string, string][] = [[0, 3, '#e2483a', 'РАУНД 1'], [3, 4, '#5a6280', 'ОТДЫХ'], [4, 7, '#e2483a', 'РАУНД 2'], [7, 8, '#5a6280', 'ОТДЫХ'], [8, 11, '#e2483a', 'РАУНД 3']];
 const SWAPS = [2, 3.5, 6, 7.5, 10];
-const roundNow = (m: number) => {
+export const roundNow = (m: number) => {
 	const t = m - 1424;
 	const s = SEGS.find(([a, b]) => t >= a && t < b);
 	if (!s) return null;

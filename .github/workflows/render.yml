@@ -1,12 +1,19 @@
 name: render
 
-# Ручной запуск: рендерит кусок ролика Long параллельной матрицей и склеивает его в один mp4.
+# Ручной запуск: рендерит Long (16:9) или Short (9:16) параллельной матрицей кусков и склеивает в один mp4.
+# Short собран из озвучки лонга (src/story/short-timeline.json, реплики шортса 001–011), свой звук — src/story/short-sound.json.
 # Ключи и .env не нужны: озвучка лежит в public/vo/, шрифты — в public/fonts/.
 on:
   workflow_dispatch:
     inputs:
+      composition:
+        description: 'Композиция: Long (16:9, 13–15 мин) или Short (9:16, ~59 с)'
+        type: choice
+        options: [Long, Short]
+        required: true
+        default: Long
       range:
-        description: 'Диапазон: lines:001-025 (номера реплик) или frames:0-3212 (кадры). Весь ролик: lines:001-175'
+        description: 'Диапазон: lines:001-025 (номера реплик) или frames:0-3212 (кадры). Long весь ролик: lines:001-175; Short весь ролик: lines:001-011 (номера реплик шортса)'
         required: true
         default: 'lines:001-025'
       chunk:
@@ -42,7 +49,11 @@ jobs:
         env:
           RANGE: ${{ inputs.range }}
           CHUNK: ${{ inputs.chunk }}
-        run: node tools/plan-chunks.mjs --range "$RANGE" --chunk "$CHUNK" --github-output
+          COMP: ${{ inputs.composition }}
+        run: |
+          TL=src/story/timeline.json
+          [ "$COMP" = "Short" ] && TL=src/story/short-timeline.json
+          node tools/plan-chunks.mjs --range "$RANGE" --chunk "$CHUNK" --timeline "$TL" --prefix "$COMP" --github-output
 
   render:
     needs: plan
@@ -81,16 +92,18 @@ jobs:
           mkdir -p public/sfx
           FF=$(node -e "import('./tools/lib.mjs').then(m=>console.log(m.ffbin()))")
           "$FF" -hide_banner -v error -y -f lavfi -i anullsrc=r=32000:cl=stereo -t 1 public/sfx/bed.wav
+          cp public/sfx/bed.wav public/sfx/bed_short.wav
       - name: Рендер куска (с одним повтором)
         env:
           NAME: ${{ matrix.name }}
           FROM: ${{ matrix.from }}
           TO: ${{ matrix.to }}
+          COMP: ${{ inputs.composition }}
         run: |
           set -u
           mkdir -p out/chunks
           # вкладок столько же, сколько в render.json (long.concurrency = 3), но не больше ядер раннера и не больше 4
-          C=$(node -e "console.log(JSON.parse(require('fs').readFileSync('src/story/render.json','utf8')).long?.concurrency ?? 3)")
+          C=$(node -e "const j=JSON.parse(require('fs').readFileSync('src/story/render.json','utf8'));console.log(j[process.env.COMP.toLowerCase()]?.concurrency ?? 3)")
           N=$(nproc); [ "$C" -gt "$N" ] && C=$N
           [ "$C" -gt 4 ] && C=4
           ok=0
@@ -98,7 +111,7 @@ jobs:
             conc=$C
             [ "$attempt" -eq 2 ] && conc=$(( (C + 1) / 2 )) # повтор — легче: меньше вкладок
             echo "attempt $attempt, tabs $conc"
-            if npx remotion render Long "out/chunks/$NAME.mp4" --frames="$FROM-$TO" --muted --gl=angle \
+            if npx remotion render "$COMP" "out/chunks/$NAME.mp4" --frames="$FROM-$TO" --muted --gl=angle \
                  --concurrency="$conc" --crf=18 --log=error --timeout=120000; then
               ok=1
               break
@@ -144,22 +157,32 @@ jobs:
           RANGE: ${{ inputs.range }}
           CHUNK: ${{ inputs.chunk }}
           COUNT: ${{ needs.plan.outputs.count }}
+          COMP: ${{ inputs.composition }}
         run: |
           set -eu
           mkdir -p out
+          TL=src/story/timeline.json
+          [ "$COMP" = "Short" ] && TL=src/story/short-timeline.json
           have=$(ls chunks/*.mp4 | wc -l)
           [ "$have" -eq "$COUNT" ] || { echo "::error::expected $COUNT chunks, found $have"; exit 1; }
-          node tools/plan-chunks.mjs --range "$RANGE" --chunk "$CHUNK" --write-timeline out/timeline_range.json
+          node tools/plan-chunks.mjs --range "$RANGE" --chunk "$CHUNK" --timeline "$TL" --prefix "$COMP" --write-timeline out/timeline_range.json
           FF=$(node -e "import('./tools/lib.mjs').then(m=>console.log(m.ffbin()))")
           (cd chunks && for f in $(ls c*.mp4 | sort); do echo "file '$f'"; done) > chunks/list.txt
           "$FF" -hide_banner -v error -y -f concat -safe 0 -i chunks/list.txt -c copy out/video.mp4
           # звук: подложку (эмбиент + эффекты из src/story/sound.json + вжухи и щелчки из auto-cues.json) собираем здесь
           # по полному timeline.json, потом вырезаем кусок под выбранный диапазон и сводим с голосом диапазона
-          node tools/check-plans.mjs || echo "check-plans не отработал, берём auto-cues.json из репозитория"
-          node tools/make-sound.mjs
+          if [ "$COMP" = "Short" ]; then
+            # шортс: голос лонга уже в short-timeline.json; подложка — по short-sound.json
+            BED=public/sfx/bed_short.wav
+            node tools/make-sound.mjs src/story/short-timeline.json src/story/short-sound.json "$BED"
+          else
+            BED=public/sfx/bed.wav
+            node tools/check-plans.mjs || echo "check-plans не отработал, берём auto-cues.json из репозитория"
+            node tools/make-sound.mjs
+          fi
           START=$(node -p "require('./out/timeline_range.json').start")
           TOTAL=$(node -p "require('./out/timeline_range.json').total")
-          "$FF" -hide_banner -v error -y -ss "$(node -p "$START / 30")" -t "$(node -p "$TOTAL / 30")" -i public/sfx/bed.wav out/bed_range.wav
+          "$FF" -hide_banner -v error -y -ss "$(node -p "$START / 30")" -t "$(node -p "$TOTAL / 30")" -i "$BED" out/bed_range.wav
           node tools/mix-audio.mjs out/timeline_range.json out/bed_range.wav 1 out/mix.wav
           node tools/loudness.mjs out/mix.wav out/video.mp4 "out/${{ needs.plan.outputs.label }}.mp4" -16
       - name: Проверка готового файла (не блокирует)

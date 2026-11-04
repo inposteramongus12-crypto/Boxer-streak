@@ -8,6 +8,7 @@ import {Caption} from './kit/graphics';
 import {ShotHost, VoiceTrack, whipAt} from './Long';
 import {SHORT, Seg} from './story/short';
 import {STORY} from './story/config';
+import {TopClock} from './story/shortV';
 
 /* 9:16 version. Two modes (src/story/short.ts):
    crop  — shorts-only video: the same shots and voice as Long, each shot cropped to 9:16
@@ -90,6 +91,10 @@ const speakerAt = (f: number) => {
 	while (k > 0 && SLINES[k].sp === 'N' && SLINES[k].dur < 40 && SLINES[k - 1].sp !== 'N') k--;
 	return k >= 0 ? SLINES[k].sp : null;
 };
+const SegTop: React.FC<{seg: (typeof TIMED)[number]}> = ({seg}) => {
+	const f = useCurrentFrame();
+	return seg.top ? <TopClock mode={seg.top} f={f} ep0={seg.ep0} /> : null;
+};
 const RecutSeg: React.FC<{seg: (typeof TIMED)[number]}> = ({seg}) => {
 	const f = useCurrentFrame();
 	const dur = seg.end - seg.start;
@@ -135,6 +140,7 @@ export const Short: React.FC<{sound?: boolean}> = ({sound = true}) => {
 					? TIMED.map((s, i) => (
 							<Sequence key={i} from={s.start} durationInFrames={s.end - s.start} name={s.line}>
 								<RecutSeg seg={s} />
+								<SegTop seg={s} />
 							</Sequence>
 						))
 					: SHOT_TIMES.map((s, i) => (
@@ -143,7 +149,7 @@ export const Short: React.FC<{sound?: boolean}> = ({sound = true}) => {
 							</Sequence>
 						))}
 			</AbsoluteFill>
-			{SHORT.hook && lines[1] ? <Caption f={f} from={0} to={lines[1].from - 4} top={190} lines={SHORT.hook} size={92} /> : null}
+			{SHORT.hook && lines[1] ? <Caption f={f} from={0} to={lines[1].from - 4} top={30} lines={SHORT.hook} size={78} /> : null}
 			{STORY.endCaption && last ? <Caption f={f} from={last.from + last.dur + 8} to={SHORT_FRAMES} top={1450} lines={STORY.endCaption} size={72} /> : null}
 			{sound ? (
 				<>

@@ -35,7 +35,7 @@ if (!(start >= 0 && end >= start && end < TL.total)) die(`frames ${start}-${end}
 const include = [];
 for (let s = start, i = 0; s <= end; s += chunk, i++) include.push({i, name: 'c' + String(i).padStart(3, '0'), from: s, to: Math.min(end, s + chunk - 1)});
 if (include.length > 250) die(`${include.length} chunks: more than 250 matrix jobs; raise the chunk size`);
-const label = `${kind}-${a}-${b}`;
+const label = `${arg('--prefix', 'Long')}-${kind}-${a}-${b}`;
 console.log(`range ${range}: frames ${start}-${end} (${((end - start + 1) / 30).toFixed(1)} s), ${include.length} chunks of ${chunk}`);
 if (process.argv.includes('--github-output') && process.env.GITHUB_OUTPUT) {
 	fs.appendFileSync(process.env.GITHUB_OUTPUT, `matrix=${JSON.stringify({include})}\ncount=${include.length}\nstart=${start}\nend=${end}\nlabel=${label}\n`);
